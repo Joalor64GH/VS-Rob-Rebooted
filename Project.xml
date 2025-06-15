@@ -2,24 +2,13 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Placeholder Engine" file="Placeholder" packageName="com.joalor64gh.placeholder" package="com.joalor64gh.placeholder" main="Main" version="0.2.7" company="Joalor64GH" />
-
-	<app preloader="flixel.system.FlxPreloader" />
-
-	<set name="SWF_VERSION" value="11.8" />
+	<app title="Friday Night Funkin': Placeholder Engine" file="Placeholder" packageName="com.joalor64.vsrob" package="com.joalor64.vsrob" main="Main" version="0.2.7" company="Joalor64" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
-	<!--These window settings apply to all targets-->
 	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
-
-	<!--HTML5-specific-->
 	<window if="html5" resizable="true" />
-
-	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
-
-	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
 
 	<!-- _____________________________ Path Settings ____________________________ -->
@@ -86,7 +75,6 @@
 	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	
-	<assets path="assets/fonts" embed='true'/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxedev set='webgl' />
@@ -96,12 +84,16 @@
 	<haxelib name="flixel-ui" />
 	
 	<haxelib name="hscript" />
-	<haxelib name="hscript-ex" />
 
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
+	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="discord_rpc" if="desktop"/>
+	<haxelib name="linc_discord-rpc" if="desktop"/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
+
+	<haxedef name="hscriptPos" />
+	<haxedef name="analyzer-optimize" />
+	<haxedef name="no-deprecation-warnings" />
+	<haxedef name="message.reporting" value="pretty" />
 
 	<!-- _______________________________ Haxe Flags ______________________________ -->
 
@@ -109,6 +101,10 @@
 	<haxeflag name="--macro" value="include('my.pack')" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<!-- hxCodec Debug Stuff -->
+	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
+	<haxedef name="HXC_LIBVLC_LOGGING" if="VIDEOS_ALLOWED debug" />
 
 	<!-- NOTE TO SELF: DISABLE THIS IF ISSUES ARE FOUND -->
 	<haxedef name="LINC_LUA_RELATIVE_DYNAMIC_LIB"/>
@@ -124,6 +120,15 @@
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+
+	<target id="haxe" tool="linker" if="linux">
+		<lib name="/usr/lib64/libX11.so" if="HXCPP_M64" /> <!-- linux support -->
+	</target> 
+	<target id="haxe" tool="linker" if="macos">
+		<lib name="/lib64/libX11.a" if="HXCPP_M64" /> <!-- mac support -->
+	</target>
+	
+	<haxedef name="NO_PRECOMPILED_HEADERS"/>
 
 	<!-- _________________________________ Icons _______________________________ -->
 	

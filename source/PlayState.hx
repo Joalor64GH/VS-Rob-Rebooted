@@ -68,7 +68,9 @@ import sys.FileSystem;
 #if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as MP4Handler;
 #elseif (hxCodec >= "2.6.1") import hxcodec.VideoHandler as MP4Handler;
 #elseif (hxCodec == "2.6.0") import VideoHandler as MP4Handler;
-#else import vlc.MP4Handler; #end
+#elseif (hxCodec) import vlc.MP4Handler; 
+#elseif (hxvlc) import hxvlc.flixel.FlxVideo as MP4Handler; 
+#end
 #end
 
 using StringTools;
@@ -1347,7 +1349,16 @@ class PlayState extends MusicBeatState
 			return;
 		}
 		var video:MP4Handler = new MP4Handler();
-		#if (hxCodec >= "3.0.0")
+		#if (hxvlc)
+		video.load(filepath);
+		video.onEndReached.add(() -> {
+			video.dispose();
+			if (FlxG.game.contains(video))
+				FlxG.game.removeChild(video);
+			startAndEnd();
+		});
+		video.play();
+		#elseif (hxCodec >= "3.0.0")
 		// Recent versions
 		video.play(filepath);
 		video.onEndReached.add(function()
