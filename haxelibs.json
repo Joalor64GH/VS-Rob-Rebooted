@@ -26,6 +26,10 @@
         "type": "haxelib"
       },
       {
+        "name": "hxcpp-debug-server",
+        "type": "haxelib"
+      },
+      {
         "name": "hscript",
         "type": "haxelib"
       },
