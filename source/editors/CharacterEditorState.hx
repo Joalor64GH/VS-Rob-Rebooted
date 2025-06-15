@@ -1,11 +1,6 @@
 package editors;
 
-#if (FLX_DEBUG || flixel < version("5.7.0"))
-typedef PointerGraphic = flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
-#else
-@:bitmap("assets/images/debugger/cursorCross.png")
-class PointerGraphic extends openfl.display.BitmapData {}
-#end
+
 
 #if desktop
 import Discord.DiscordClient;
@@ -45,6 +40,13 @@ import sys.FileSystem;
 #end
 
 using StringTools;
+
+#if (FLX_DEBUG || flixel < version("5.7.0"))
+typedef PointerGraphic = flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
+#else
+@:bitmap("assets/images/debugger/cursorCross.png")
+class PointerGraphic extends openfl.display.BitmapData {}
+#end
 
 /**
 	*DEBUG MODE
