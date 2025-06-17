@@ -29,10 +29,12 @@ import lime.app.Application;
 import haxe.*;
 import haxe.io.Path;
 
-#if sys
+#if (sys || MODS_ALLOWED)
 import sys.*;
 import sys.io.*;
 #end
+
+import animateatlas.AtlasFrameMaker;
 
 using StringTools;
 using CoolUtil;

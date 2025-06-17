@@ -25,8 +25,6 @@ import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import Controls;
 
-using StringTools;
-
 class OptionsState extends MusicBeatState
 {
 	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
@@ -37,15 +35,15 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
-				openSubState(new options.NotesSubState());
+				openSubState(new options.OptionsSubState.NotesSubState());
 			case 'Controls':
-				openSubState(new options.ControlsSubState());
+				openSubState(new options.OptionsSubState.ControlsSubState());
 			case 'Graphics':
-				openSubState(new options.GraphicsSettingsSubState());
+				openSubState(new options.OptionsSubState.GraphicsSettingsSubState());
 			case 'Visuals and UI':
-				openSubState(new options.VisualsUISubState());
+				openSubState(new options.OptionsSubState.VisualsUISubState());
 			case 'Gameplay':
-				openSubState(new options.GameplaySettingsSubState());
+				openSubState(new options.OptionsSubState.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
 		}

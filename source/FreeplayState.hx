@@ -1,16 +1,5 @@
 package;
 
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.group.FlxGroup.FlxTypedGroup;
-
-import flixel.tweens.FlxTween;
-
-using StringTools;
-
 class FreeplayState extends MusicBeatState 
 {
     	private var grpControls:FlxTypedGroup<Alphabet>;
@@ -94,7 +83,7 @@ class FreeplayState extends MusicBeatState
 		topPanel.alpha = 0.6;
 		add(topPanel);
 
-		var controlsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "R - RESET SCORE // CTRL - GAMEPLAY CHANGERS", 32);
+		var controlsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "R - RESET SCORE // CTRL - GAMEPLAY CHANGERS // ALT - REPLAYS", 32);
 		controlsTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		controlsTxt.screenCenter(X);
 		controlsTxt.scrollFactor.set();

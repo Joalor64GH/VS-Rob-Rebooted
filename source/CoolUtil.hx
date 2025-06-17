@@ -17,26 +17,11 @@ using StringTools;
 
 class CoolUtil
 {
-	inline public static function boundTo(value:Float, min:Float, max:Float):Float {
+	inline public static function boundTo(value:Float, min:Float, max:Float):Float
 		return Math.max(min, Math.min(max, value));
-	}
 
-	public static function coolTextFile(path:String):Array<String>
-	{
-		var daList:Array<String> = [];
-		#if sys
-		if(FileSystem.exists(path)) daList = File.getContent(path).trim().split('\n');
-		#else
-		if(Assets.exists(path)) daList = Assets.getText(path).trim().split('\n');
-		#end
-
-		for (i in 0...daList.length)
-		{
-			daList[i] = daList[i].trim();
-		}
-
-		return daList;
-	}
+	inline public static function coolTextFile(path:String):Array<String>
+		return FileAssets.exists(path) ? [for (i in Assets.getText(path).trim().split('\n')) i.trim()] : [];
 
 	inline public static function colorFromString(color:String):FlxColor
 	{
@@ -87,35 +72,71 @@ class CoolUtil
 		return maxKey;
 	}
 
-	public static function numberArray(max:Int, ?min = 0):Array<Int>
-	{
-		var dumbArray:Array<Int> = [];
-		for (i in min...max)
+	public static function coolReplace(string:String, sub:String, by:String):String
+		return string.split(sub).join(by);
+
+	public static function coolSongFormatter(song:String):String
+    {
+        var swag:String = coolReplace(song, '-', ' ');
+        var splitSong:Array<String> = swag.split(' ');
+
+		for (i in 0...splitSong.length)
 		{
-			dumbArray.push(i);
-		}
-		return dumbArray;
+            var firstLetter = splitSong[i].substring(0, 1);
+            var coolSong:String = coolReplace(splitSong[i], firstLetter, firstLetter.toUpperCase());
+			var splitCoolSong:Array<String> = coolSong.split('');
+
+			coolSong = Std.string(splitCoolSong[0]).toUpperCase();
+
+			for (e in 0...splitCoolSong.length)
+				coolSong += Std.string(splitCoolSong[e+1]).toLowerCase();
+
+            for (l in 0...splitSong.length)
+            {
+                var stringSong:String = Std.string(splitSong[l+1]);
+                var stringFirstLetter:String = stringSong.substring(0, 1);
+
+				var splitStringSong = stringSong.split('');
+				stringSong = Std.string(splitStringSong[0]).toUpperCase();
+
+				for (l in 0...splitStringSong.length)
+					stringSong += Std.string(splitStringSong[l+1]).toLowerCase();
+
+                coolSong += ' $stringSong';
+            }
+
+            return song;
+        }
+
+        return swag;
 	}
 
-	//uhhhh does this even work at all? i'm starting to doubt
+	#if sys
+	public static function coolPathArray(path:String):Array<String>
+		return FileSystem.readDirectory(FileSystem.absolutePath(path));
+	#end
+
+	inline public static function numberArray(max:Int, ?min = 0):Array<Int>
+		return [for (i in min...max) i];
+
 	public static function precacheSound(sound:String, ?library:String = null):Void {
-		precacheSoundFile(Paths.sound(sound, library));
+		Paths.sound(sound);
 	}
 
 	public static function precacheMusic(sound:String, ?library:String = null):Void {
-		precacheSoundFile(Paths.music(sound, library));
+		Paths.music(sound);
 	}
 
-	private static function precacheSoundFile(file:Dynamic):Void {
-		if (Assets.exists(file, SOUND) || Assets.exists(file, MUSIC))
-			Assets.getSound(file, true);
-	}
-
-	public static function browserLoad(site:String) {
+	public static function browserLoad(url:String) {
 		#if linux
-		Sys.command('/usr/bin/xdg-open', [site]);
+		var cmd = Sys.command("xdg-open", [url]);
+		if (cmd != 0)
+			cmd = Sys.command("/usr/bin/xdg-open", [url]);
+		Sys.command('/usr/bin/xdg-open', [url]);
 		#else
-		FlxG.openURL(site);
+		FlxG.openURL(url);
 		#end
 	}
 }
+
+typedef FileAssets = #if sys FileSystem; #else openfl.utils.Assets; #end

@@ -6,6 +6,8 @@ import haxe.CallStack;
 import haxe.io.Path;
 #end
 
+import debug.FPS;
+
 class Main extends openfl.display.Sprite
 {
 	public final config:Dynamic = {

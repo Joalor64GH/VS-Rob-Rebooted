@@ -1,10 +1,5 @@
 package;
 
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.util.FlxTimer;
-
 class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;

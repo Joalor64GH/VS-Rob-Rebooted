@@ -1,14 +1,3 @@
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxCamera;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.group.FlxSpriteGroup;
-import flixel.util.FlxColor;
-import flixel.text.FlxText;
-
-using StringTools;
-
 class Achievements {
 	public static var achievementsStuff:Array<Dynamic> = [ //Name, Description, Achievement save tag, Hidden achievement
 		["Freaky on a Friday Night",	"Play on a Friday... Night.",						'friday_night_play',	 true],

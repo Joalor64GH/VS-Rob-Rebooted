@@ -6,14 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
-#if (flixel >= "5.3.0")
-import flixel.sound.FlxSound;
-#else
-import flixel.system.FlxSound;
-#end
-import flash.media.Sound;
-
-using StringTools;
+import openfl.media.Sound;
 
 /**
  * Loosley based on FlxTypeText lolol
@@ -57,6 +50,8 @@ class Alphabet extends FlxSpriteGroup
 	public var typingSpeed:Float = 0.05;
 
 	public var xTo:Int = 100;
+
+	public var menuType(default, set):String;
 
 	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false, ?typingSpeed:Float = 0.05, ?textSize:Float = 1)
 	{
@@ -361,13 +356,20 @@ class Alphabet extends FlxSpriteGroup
 		if (isMenuItem)
 		{
 			var lerpVal:Float = CoolUtil.boundTo(elapsed * 9.6, 0, 1);
-			y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
-			if(forceX != Math.NEGATIVE_INFINITY) {
-				x = forceX;
-			} else {
-				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+			switch (menuType)
+			{
+				case 'Centered':
+					y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.5), 0.32);
+
+				default:
+					y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+					if(forceX != Math.NEGATIVE_INFINITY) {
+						x = forceX;
+					} else {
+						x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+					}
+					x = (!disableX) ? FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 6) : FlxMath.lerp(x, xTo, elapsed * 6);
 			}
-			x = (!disableX) ? FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 6) : FlxMath.lerp(x, xTo, elapsed * 6);
 		}
 
 		if (isMenuItemCentered)
@@ -420,6 +422,15 @@ class Alphabet extends FlxSpriteGroup
 			typeTimer.destroy();
 		}
 		typeTimer = null;
+	}
+
+	inline function set_menuType(value:String)
+	{
+		if (value == 'Centered')
+			screenCenter(X);
+
+		menuType = value;
+		return value;
 	}
 }
 
