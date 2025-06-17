@@ -17,10 +17,7 @@ class FreeplayState extends MusicBeatState
         private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	public var controlStrings:Array<CoolSong> = [
-		new CoolSong('Tutorial',   'woah',                'gf',  '911444'),
-		new CoolSong('Bopeebo',    'example description', 'dad', 'b73cfa'),
-		new CoolSong('Fresh', 	   'idk',                 'dad', 'b73cfa'),
-		new CoolSong('Dad Battle', 'what',                'dad', 'b73cfa')
+		new CoolSong('Tutorial',   'woah',                'gf',  '911444')
 	];
 	
 	var lerpScore:Int = 0;
@@ -91,6 +88,17 @@ class FreeplayState extends MusicBeatState
 		descTxt.scrollFactor.set();
 		descTxt.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(descTxt);
+
+		var topPanel:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 26, FlxColor.BLACK);
+		topPanel.scrollFactor.set();
+		topPanel.alpha = 0.6;
+		add(topPanel);
+
+		var controlsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "R - RESET SCORE // CTRL - GAMEPLAY CHANGERS", 32);
+		controlsTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		controlsTxt.screenCenter(X);
+		controlsTxt.scrollFactor.set();
+		add(controlsTxt);
 
 		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		missingTextBG.alpha = 0.6;
