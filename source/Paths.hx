@@ -8,6 +8,7 @@ using haxe.io.Path;
 typedef GarbageCollect = #if cpp cpp.vm.Gc; #elseif hl hl.Gc; #elseif neko neko.vm.Gc; #end
 
 @:keep
+@:access(openfl.display.BitmapData)
 class Paths
 {
 	inline public static final SOUND_EXT = "ogg";

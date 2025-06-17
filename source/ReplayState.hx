@@ -1,9 +1,6 @@
-package meta.state;
+package;
 
 import openfl.events.KeyboardEvent;
-
-import objects.userinterface.note.Note;
-import objects.userinterface.note.*;
 
 using DateTools;
 
@@ -27,8 +24,6 @@ class ReplayState extends PlayState
     override function create():Void
     {
         super.create();
-
-        Application.current.window.title = "Friday Night Funkin': Joalor64 Engine Rewritten - REPLAY OF: " + '${_song}';
 
         _song = PlayState.SONG.song.toLowerCase().replace('-', ' ');
         #if sys
