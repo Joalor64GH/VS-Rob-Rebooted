@@ -103,7 +103,7 @@ class FreeplayState extends MusicBeatState
 		missingText.visible = false;
 		add(missingText);
 
-		menuBG.color = CoolUtil.colorFromString(controlStrings[curSelected].color);
+		menuBG.color = CoolUtil.colorFromString(controlStrings[curSelected].col);
 		intendedColor = menuBG.color;
 
         	changeSelection();

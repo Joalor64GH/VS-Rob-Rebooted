@@ -266,7 +266,7 @@ class FunkinLua {
 				name = PlayState.SONG.song;
 
 			var poop = Highscore.formatSong(name);
-			PlayState.SONG = Song.loadFromJson(poop, name);
+			PlayState.SONG = Song.loadFromJson(poop);
 			PlayState.instance.persistentUpdate = false;
 			LoadingState.loadAndSwitchState(new PlayState());
 
