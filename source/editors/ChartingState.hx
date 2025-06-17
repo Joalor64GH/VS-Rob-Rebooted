@@ -436,15 +436,15 @@ class ChartingState extends MusicBeatState
 		{
 			
 			var songName:String = Paths.formatToSongPath(_song.song);
-			var file:String = Paths.json('charts/$songName-events');
+			var file:String = Paths.json('charts/events/$songName');
 			#if sys
-			if (#if MODS_ALLOWED FileSystem.exists(Paths.modsJson('charts/$songName-events')) || #end FileSystem.exists(file))
+			if (#if MODS_ALLOWED FileSystem.exists(Paths.modsJson('charts/events/$songName')) || #end FileSystem.exists(file))
 			#else
 			if (OpenFlAssets.exists(file))
 			#end
 			{
 				clearEvents();
-				var events:SwagSong = Song.loadFromJson('$songName-events');
+				var events:SwagSong = Song.loadFromJson('events/$songName');
 				_song.events = events.events;
 				changeSection(curSection);
 			}

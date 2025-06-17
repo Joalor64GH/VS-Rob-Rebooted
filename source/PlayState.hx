@@ -1823,13 +1823,13 @@ class PlayState extends MusicBeatState
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
-		var file:String = Paths.json('$songName-events');
+		var file:String = Paths.json('charts/events/$songName');
 		#if sys
-		if (FileSystem.exists(Paths.modsJson('$songName-events')) || FileSystem.exists(file)) {
+		if (FileSystem.exists(Paths.modsJson('charts/events/$songName')) || FileSystem.exists(file)) {
 		#else
 		if (OpenFlAssets.exists(file)) {
 		#end
-			var eventsData:Array<Dynamic> = Song.loadFromJson('$songName-events').events;
+			var eventsData:Array<Dynamic> = Song.loadFromJson('events/$songName').events;
 			for (event in eventsData) //Event Notes
 			{
 				for (i in 0...event[1].length)
