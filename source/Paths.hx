@@ -1,5 +1,7 @@
 package;
 
+import flixel.graphics.FlxGraphic;
+
 using haxe.io.Path;
 
 typedef GarbageCollect = #if cpp cpp.vm.Gc; #elseif hl hl.Gc; #elseif neko neko.vm.Gc; #end
