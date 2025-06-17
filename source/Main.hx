@@ -1,16 +1,12 @@
 package;
 
-#if CRASH_HANDLER
-import lime.app.Application;
+#if desktop
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
-import Discord.DiscordClient;
-import sys.FileSystem;
-import sys.io.File;
 #end
 
-class Main extends Sprite
+class Main extends openfl.display.Sprite
 {
 	public final config:Dynamic = {
 		gameDimensions: [1280, 720],
@@ -45,6 +41,10 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
+		#if windows
+		Windows.darkMode(true);
+		#end
 	
 		ClientPrefs.loadDefaultKeys();
 		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash, config.startFullscreen));
