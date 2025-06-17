@@ -340,7 +340,7 @@ class PlayState extends MusicBeatState
 			SONG = Song.loadFromJson('tutorial');
 
 		Conductor.mapBPMChanges(SONG);
-		Conductor.changeBPM(SONG.bpm);
+		Conductor.bpm = SONG.bpm;
 
 		#if desktop
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
@@ -1798,7 +1798,7 @@ class PlayState extends MusicBeatState
 		}
 		
 		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
+		Conductor.bpm = songData.bpm;
 		
 		curSong = songData.song;
 
@@ -4005,18 +4005,20 @@ class PlayState extends MusicBeatState
 		var skin:String = 'noteSplashes';
 		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
 		
-		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
-		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;
-		var brt:Float = ClientPrefs.arrowHSV[data % 4][2] / 100;
+		var col:FlxColor = FlxColor.WHITE;
+		if (data > -1 && data < ClientPrefs.arrowRGB.length)
+		{
+			col = ClientPrefs.arrowRGB[data][0];
+			if(note != null) {
+				col = note.noteSplashColor;
+			}
+		}
 		if(note != null) {
 			skin = note.noteSplashTexture;
-			hue = note.noteSplashHue;
-			sat = note.noteSplashSat;
-			brt = note.noteSplashBrt;
 		}
 
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(x, y, data, skin, hue, sat, brt);
+		splash.setupNoteSplash(x, y, data, skin, col);
 		grpNoteSplashes.add(splash);
 	}
 
@@ -4256,7 +4258,7 @@ class PlayState extends MusicBeatState
 		{
 			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
 			{
-				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
+				Conductor.bpm = SONG.notes[Math.floor(curStep / 16)].bpm;
 				//FlxG.log.add('CHANGED BPM!');
 				setOnLuas('curBpm', Conductor.bpm);
 				setOnLuas('crochet', Conductor.crochet);
@@ -4265,10 +4267,7 @@ class PlayState extends MusicBeatState
 			setOnLuas('mustHitSection', SONG.notes[Math.floor(curStep / 16)].mustHitSection);
 			setOnLuas('altAnim', SONG.notes[Math.floor(curStep / 16)].altAnim);
 			setOnLuas('gfSection', SONG.notes[Math.floor(curStep / 16)].gfSection);
-			// else
-			// Conductor.changeBPM(SONG.bpm);
 		}
-		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos)
 		{
