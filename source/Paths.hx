@@ -1,6 +1,7 @@
 package;
 
 import flixel.graphics.FlxGraphic;
+import openfl.utils.AssetType;
 
 using haxe.io.Path;
 
