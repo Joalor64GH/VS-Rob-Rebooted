@@ -19,7 +19,7 @@ package;
     #endif
     ')
 @:dox(hide)
-class Windows {
+class WindowsAPI {
 	@:functionCode('
         int darkMode = enable ? 1 : 0;
         HWND window = GetActiveWindow();

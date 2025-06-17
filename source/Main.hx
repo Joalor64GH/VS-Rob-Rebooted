@@ -43,7 +43,7 @@ class Main extends openfl.display.Sprite
 		super();
 
 		#if windows
-		Windows.darkMode(true);
+		WindowsAPI.darkMode(true);
 		#end
 	
 		ClientPrefs.loadDefaultKeys();
