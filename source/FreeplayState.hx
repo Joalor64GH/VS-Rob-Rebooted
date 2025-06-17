@@ -58,7 +58,7 @@ class FreeplayState extends MusicBeatState
 
         	grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
-		grpIcons = new FlxTypedGroup<Alphabet>();
+		grpIcons = new FlxTypedGroup<HealthIcon>();
 		add(grpIcons);
 
 		for (i in 0...controlStrings.length)
@@ -154,7 +154,7 @@ class FreeplayState extends MusicBeatState
 			try 
 			{
 				LoadingState.loadAndSwitchState(new PlayState());
-				PlayState.SONG = Song.loadFromJson(formatIdfk, lowercasePlz);
+				PlayState.SONG = Song.loadFromJson(formatIdfk);
 				PlayState.isStoryMode = false;
 			} 
 			catch(e:Dynamic)
@@ -198,9 +198,9 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= grpControls.length)
 			curSelected = 0;
 
-		descTxt.text = controlStrings[curSelected].description;
+		descTxt.text = controlStrings[curSelected].desc;
 
-		var newColor:FlxColor = CoolUtil.colorFromString(controlStrings[curSelected].color);
+		var newColor:FlxColor = CoolUtil.colorFromString(controlStrings[curSelected].col);
 		trace('The BG color is: $newColor');
 		if(newColor != intendedColor) 
 		{
