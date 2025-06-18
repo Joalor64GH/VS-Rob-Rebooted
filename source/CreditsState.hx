@@ -69,7 +69,7 @@ class CreditsState extends MusicBeatState
 			text.ID = i;
 			grpOptions.add(text);
 
-			if(isSelectable) {
+			if(unselectableCheck(i)) {
 				var icon:AttachedSprite = new AttachedSprite('credits/' + creditsStuff[i][1]);
 				icon.xAdd = text.width + 10;
 				icon.sprTracker = text;
