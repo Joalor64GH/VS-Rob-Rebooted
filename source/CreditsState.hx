@@ -8,7 +8,7 @@ class CreditsState extends MusicBeatState
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [
 			['Psych Engine Team'],
-			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '444444',
+			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '444444',]
 			['Riveren', 'riveren', 'Main Artist/Animator of Psych Engine', 'https://twitter.com/riverennn', '14967B'],
 			[''],
 			['Former Engine Members'],
@@ -22,7 +22,7 @@ class CreditsState extends MusicBeatState
 			['EliteMasterEric', 'mastereric', 'Runtime Shaders support', 'https://twitter.com/EliteMasterEric', 'FFBD40'],
 			['PolybiusProxy', 'proxy', 'Creator of hxCodec', 'https://twitter.com/polybiusproxy', 'DCD294'],
 			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs\nExtension WebM Fork', 'https://twitter.com/kade0912', '64A250'],
-			['Keoiki', keoikiStr, 'Note Splash Animations\nNew Latin Support', 'https://twitter.com/Keoiki_', 'D2D2D2'],
+			['Keoiki', 'keoiki', 'Note Splash Animations\nLatin Support', 'https://twitter.com/Keoiki_', 'D2D2D2'],
 			['Nebula the Zorua', 'nebula', 'Contributor', 'https://twitter.com/Nebula_Zorua', '7D40B2'],
 			['Smokey', 'smokey', 'Sprite Atlas Support', 'https://twitter.com/Smokey_5_', '483D92'],
 			[''],
@@ -62,15 +62,6 @@ class CreditsState extends MusicBeatState
 	
 		for (i in 0...creditsStuff.length)
 		{
-			var isSelectable:Bool = !unselectableCheck(i);
-			var optionText:Alphabet = new Alphabet(0, 70 * i, creditsStuff[i][0], !isSelectable, false);
-			optionText.isMenuItem = true;
-			optionText.screenCenter(X);
-			optionText.yAdd -= 70;
-			optionText.forceX = optionText.x;
-			optionText.targetY = i;
-			grpOptions.add(optionText);
-
 			var text:FlxText = new FlxText(20, 60 + (i * 80), creditsStuff[i][0], 32);
 			text.setFormat(Paths.font('android.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.ID = i;
@@ -94,7 +85,7 @@ class CreditsState extends MusicBeatState
 		add(descBox);
 
 		descText = new FlxText(50, FlxG.height + offsetThing - 25, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
+		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		descText.scrollFactor.set();
 		descBox.sprTracker = descText;
 		add(descText);
