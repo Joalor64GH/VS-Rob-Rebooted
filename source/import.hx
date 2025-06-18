@@ -36,6 +36,10 @@ import sys.io.*;
 
 import animateatlas.AtlasFrameMaker;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 using StringTools;
 using CoolUtil;
 

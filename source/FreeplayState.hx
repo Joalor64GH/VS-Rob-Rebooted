@@ -28,7 +28,7 @@ class FreeplayState extends MusicBeatState
 
     	override function create()
 	{
-		controlStrings.push(new CoolSong('Test', 'omg real??', 'bf-pixel')); // test function
+		controlStrings.push(new CoolSong('Test', 'omg real??', 'bf-pixel'));
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('mainmenu/bg_msn'));
         	menuBG.antialiasing = ClientPrefs.globalAntialiasing;
