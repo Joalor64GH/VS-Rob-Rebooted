@@ -1,0 +1,55 @@
+{
+	"animations": [
+		{
+			"offsets": [28, 0],
+			"indices": [],
+			"fps": 12,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "rob left0"
+		},
+		{
+			"offsets": [-15, 0],
+			"indices": [],
+			"fps": 12,
+			"anim": "idle",
+			"loop": false,
+			"name": "rob idle0"
+		},
+		{
+			"offsets": [-66, 0],
+			"indices": [],
+			"fps": 12,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "rob right0"
+		},
+		{
+			"offsets": [-15, 35],
+			"indices": [],
+			"fps": 12,
+			"anim": "singUP",
+			"loop": false,
+			"name": "rob up0"
+		},
+		{
+			"offsets": [-15, -20],
+			"indices": [],
+			"fps": 12,
+			"anim": "singDOWN",
+			"loop": false,
+			"name": "rob down0"
+		}
+	],
+	"vocals_file": "",
+	"no_antialiasing": false,
+	"image": "characters/rob",
+	"position": [0, 110],
+	"healthicon": "bf",
+	"flip_x": true,
+	"healthbar_colors": [41, 128, 185],
+	"camera_position": [-90, -40],
+	"sing_duration": 4,
+	"scale": 1,
+	"_editor_isPlayer": false
+}

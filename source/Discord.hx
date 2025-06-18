@@ -8,8 +8,6 @@ import llua.Lua;
 import llua.State;
 #end
 
-using StringTools;
-
 class DiscordClient
 {
 	public static var isInitialized:Bool = false;
@@ -17,7 +15,7 @@ class DiscordClient
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "863222024192262205",
+			clientID: "1384970716440563782",
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -28,7 +26,6 @@ class DiscordClient
 		{
 			DiscordRpc.process();
 			sleep(2);
-			//trace("Discord Client Update");
 		}
 
 		DiscordRpc.shutdown();
@@ -45,7 +42,7 @@ class DiscordClient
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
-			largeImageText: "Psych Engine"
+			largeImageText: "VS Rob Rebooted"
 		});
 	}
 
@@ -84,12 +81,9 @@ class DiscordClient
 			largeImageKey: 'icon',
 			largeImageText: "Engine Version: " + MainMenuState.placeholderVersion,
 			smallImageKey : smallImageKey,
-			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp : Std.int(startTimestamp / 1000),
             endTimestamp : Std.int(endTimestamp / 1000)
 		});
-
-		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 
 	#if LUA_ALLOWED

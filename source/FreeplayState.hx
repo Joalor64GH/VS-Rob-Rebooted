@@ -6,7 +6,7 @@ class FreeplayState extends MusicBeatState
         private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	public var controlStrings:Array<CoolSong> = [
-		new CoolSong('Tutorial',   'woah',                'gf',  '911444')
+		new CoolSong('Tutorial', 'woah', 'gf')
 	];
 	
 	var lerpScore:Int = 0;
@@ -21,9 +21,6 @@ class FreeplayState extends MusicBeatState
 
 	var menuBG:FlxSprite;
 
-	var intendedColor:FlxColor;
-	var colorTween:FlxTween;
-
     	var curSelected:Int = 0;
 
 		var missingText:FlxText;
@@ -31,11 +28,15 @@ class FreeplayState extends MusicBeatState
 
     	override function create()
 	{
-		controlStrings.push(new CoolSong('Test', 'omg real??', 'bf-pixel', '59d0ff')); // test function
+		controlStrings.push(new CoolSong('Test', 'omg real??', 'bf-pixel')); // test function
 
-		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		menuBG = new FlxSprite().loadGraphic(Paths.image('mainmenu/bg_msn'));
         	menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
+
+		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid.velocity.set(40, 40);
+		add(grid);
 
         	var slash:FlxSprite = new FlxSprite().loadGraphic(Paths.image('freeplay/slash'));
 		slash.antialiasing = ClientPrefs.globalAntialiasing;
@@ -100,9 +101,6 @@ class FreeplayState extends MusicBeatState
 		missingText.visible = false;
 		add(missingText);
 
-		menuBG.color = CoolUtil.colorFromString(controlStrings[curSelected].col);
-		intendedColor = menuBG.color;
-
         	changeSelection();
 
 		super.create();
@@ -134,10 +132,6 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK) 
         	{
-			if(colorTween != null) 
-			{
-					colorTween.cancel();
-				}
                 	FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
         	}
@@ -197,24 +191,6 @@ class FreeplayState extends MusicBeatState
 
 		descTxt.text = controlStrings[curSelected].desc;
 
-		var newColor:FlxColor = CoolUtil.colorFromString(controlStrings[curSelected].col);
-		trace('The BG color is: $newColor');
-		if(newColor != intendedColor) 
-		{
-			if(colorTween != null) 
-			{
-				colorTween.cancel();
-			}
-			intendedColor = newColor;
-			colorTween = FlxTween.color(menuBG, 1, menuBG.color, intendedColor, 
-			{
-				onComplete: function(twn:FlxTween) 
-				{
-					colorTween = null;
-				}
-			});
-		}
-
 		var bullShit:Int = 0;
 
         	intendedScore = Highscore.getScore(controlStrings[curSelected].name);
@@ -242,13 +218,11 @@ class CoolSong
 	public var name:String = '';
 	public var desc:String = '';
 	public var icon:String = '';
-	public var col:String = '';
 
-	public function new(name:String, desc:String, icon:String, col:String)
+	public function new(name:String, desc:String, icon:String)
 	{
 		this.name = name;
         	this.desc = desc;
         	this.icon = icon;
-		this.col = col;
 	}
 }

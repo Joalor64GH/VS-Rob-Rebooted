@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="rob.png">
+	<!-- Created using the Free Tex Packer -->
+	<!-- And manually modified by me -->
+	<!-- https://free-tex-packer.com/ -->
+	<!-- THIS MIGHT BE MY FIRST DECENT FNF SPRITESHEET!! -->
+	<SubTexture name="rob idle0004" x="325" y="660" width="310" height="645" frameX="2" frameY="2" frameWidth="310" frameHeight="645" />
+	<SubTexture name="rob idle0003" x="414" y="1315" width="310" height="645" frameX="2" frameY="2" frameWidth="310" frameHeight="645" />
+	<SubTexture name="rob idle0002" x="645" y="660" width="310" height="645" frameX="2" frameY="2" frameWidth="310" frameHeight="645" />
+	<SubTexture name="rob idle0001" x="734" y="5" width="310" height="645" frameX="2" frameY="2" frameWidth="310" frameHeight="645" />
+	<SubTexture name="rob down0001" x="325" y="5" width="399" height="645" frameX="2" frameY="2" frameWidth="399" frameHeight="645" />
+	<SubTexture name="rob down0002" x="5" y="1331" width="399" height="645" frameX="2" frameY="2" frameWidth="399" frameHeight="645" />
+	<SubTexture name="rob right0001" x="965" y="660" width="338" height="645" frameX="2" frameY="2" frameWidth="338" frameHeight="645" />
+	<SubTexture name="rob right0002" x="733" y="1315" width="339" height="645" frameX="2" frameY="2" frameWidth="339" frameHeight="645" />
+	<SubTexture name="rob left0001" x="1082" y="1315" width="338" height="645" frameX="2" frameY="2" frameWidth="338" frameHeight="645" />
+	<SubTexture name="rob left0002" x="1054" y="5" width="338" height="645" frameX="2" frameY="2" frameWidth="338" frameHeight="645" />
+	<SubTexture name="rob up0001" x="5" y="5" width="310" height="653" frameX="2" frameY="2" frameWidth="310" frameHeight="653" />
+	<SubTexture name="rob up0002" x="5" y="668" width="310" height="651" frameX="2" frameY="2" frameWidth="310" frameHeight="651" />
+</TextureAtlas>
