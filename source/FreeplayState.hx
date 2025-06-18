@@ -68,7 +68,7 @@ class FreeplayState extends MusicBeatState
 		add(bottomPanel);
 
         	scoreText = new FlxText(20, FlxG.height - 80, 1000, "", 22);
-		scoreText.setFormat("VCR OSD Mono", 30, 0xFFffffff, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreText.setFormat(Paths.font("vcr.ttf"), 30, 0xFFffffff, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.scrollFactor.set();
         	scoreText.screenCenter(X);
         	add(scoreText);
@@ -76,7 +76,7 @@ class FreeplayState extends MusicBeatState
         	descTxt = new FlxText(scoreText.x, scoreText.y + 36, 1000, "", 22);
         	descTxt.screenCenter(X);
 		descTxt.scrollFactor.set();
-		descTxt.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(descTxt);
 
 		var topPanel:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 26, FlxColor.BLACK);
@@ -176,6 +176,10 @@ class FreeplayState extends MusicBeatState
 			openSubState(new ResetScoreSubState(controlStrings[curSelected].name, controlStrings[curSelected].icon));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
+		#if sys
+		else if (FlxG.keys.justPressed.ALT)
+			MusicBeatState.switchState(new ReplaySelectState(controlStrings[curSelected].name));
+		#end
 	}
 
 	function changeSelection(change:Int = 0)
@@ -206,9 +210,7 @@ class FreeplayState extends MusicBeatState
 			item.alpha = 0.6;
 
 			if (item.targetY == 0)
-			{
 				item.alpha = 1;
-			}
 		}
 	}
 }

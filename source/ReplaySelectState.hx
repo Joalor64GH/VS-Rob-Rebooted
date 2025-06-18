@@ -101,14 +101,14 @@ class ReplaySelectState extends MusicBeatState
 		dateText.scrollFactor.set();
         dateText.borderSize = 2;
 		dateText.borderQuality = 2;
-        dateText.setFormat("VCR OSD Mono", 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        dateText.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(dateText);
 
         songText = new FlxText(10, 96, 0, 'Song Name: ${songName.toUpperCase()}', 30);
         songText.scrollFactor.set();
         songText.borderSize = 2;
 		songText.borderQuality = 2;
-        songText.setFormat("VCR OSD Mono", 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        songText.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(songText);
 
         super.create();
