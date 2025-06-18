@@ -56,6 +56,18 @@ class MainMenuState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
+		var menuCover:FlxSprite = new FlxSprite().makeGraphic(FlxG.width - 500, Std.int(FlxG.height));
+		menuCover.alpha = .5;
+		menuCover.color = FlxColor.WHITE;
+		menuCover.screenCenter(X);
+		add(menuCover);
+
+		var menuCoverAlt:FlxSprite = new FlxSprite().makeGraphic(Std.int(menuCover.width - 20), Std.int(menuCover.height));
+		menuCoverAlt.setPosition(menuCover.x + 10, menuCover.y);
+		menuCoverAlt.alpha = .7;
+		menuCoverAlt.color = FlxColor.BLACK;
+		add(menuCoverAlt);
+
 		menuItems = new FlxTypedGroup<FlxText>();
 		add(menuItems);
 

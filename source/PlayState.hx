@@ -248,6 +248,8 @@ class PlayState extends MusicBeatState
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
 
+	public var scriptArray:Array<FunkinHScript> = [];
+
 	// Debug buttons
 	private var debugKeysChart:Array<FlxKey>;
 	private var debugKeysCharacter:Array<FlxKey>;
@@ -497,6 +499,11 @@ class PlayState extends MusicBeatState
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
 						luaArray.push(new FunkinLua(folder + file));
+						filesPushed.push(file);
+					}
+					if(Paths.validScriptType(file) && !filesPushed.contains(file))
+					{
+						scriptArray.push(new FunkinHScript(folder + file));
 						filesPushed.push(file);
 					}
 				}
@@ -805,10 +812,21 @@ class PlayState extends MusicBeatState
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
 					}
+					if(Paths.validScriptType(file) && !filesPushed.contains(file))
+					{
+						scriptArray.push(new FunkinHScript(folder + file));
+						filesPushed.push(file);
+					}
 				}
 			}
 		}
 		#end
+
+		for (script in scriptArray) {
+			script?.setVariable('addScript', function(path:String) {
+				scriptArray.push(new FunkinHScript(Paths.script(path)));
+			});
+		}
 		
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode && !seenCutscene)
@@ -1659,6 +1677,7 @@ class PlayState extends MusicBeatState
 				timer.active = true;
 			}
 			paused = false;
+			callOnScripts('resume', []);
 			callOnLuas('onResume', []);
 
 			#if desktop
@@ -1726,6 +1745,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		callOnScripts('update', [elapsed]);
 		callOnLuas('onUpdate', [elapsed]);
 
 		if(!inCutscene) {
@@ -3313,7 +3333,25 @@ class PlayState extends MusicBeatState
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
+		callOnScripts('destroy', []);
 		super.destroy();
+
+		for (script in scriptArray)
+			script?.destroy();
+		scriptArray = [];
+	}
+
+	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
+		var value:Dynamic = FunkinHScript.Function_Continue;
+
+		for (i in 0...scriptArray.length) {
+			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
+			final bool:Bool = call == FunkinHScript.Function_Continue;
+			if (!bool && call != null)
+				value = call;
+		}
+
+		return value;
 	}
 
 	public static function cancelMusicFadeTween() {
@@ -3344,6 +3382,7 @@ class PlayState extends MusicBeatState
 		}
 
 		lastStepHit = curStep;
+		callOnScripts('stepHit', [curStep]);
 		setOnLuas('curStep', curStep);
 		callOnLuas('onStepHit', []);
 	}
@@ -3412,6 +3451,7 @@ class PlayState extends MusicBeatState
 		}
 
 		lastBeatHit = curBeat;
+		callOnScripts('beatHit', [curBeat]);
 
 		setOnLuas('curBeat', curBeat); //DAWGG?????
 		callOnLuas('onBeatHit', []);

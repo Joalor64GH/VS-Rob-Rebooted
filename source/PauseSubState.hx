@@ -24,7 +24,13 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart', 'Exit'];
+	var exitChoices = [
+		'Exit to Freeplay', 
+		'Exit to Menu', 
+		'Exit Game', 
+		'Back'
+	];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -175,6 +181,43 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (accepted)
 		{
+			if (menuItems == exitChoices)
+			{
+				if(menuItems.length - 1 != curSelected && exitChoices.contains(daSelected)) {
+					switch (daSelected)
+					{
+						case "Exit to Freeplay":
+							PlayState.deathCounter = 0;
+							PlayState.seenCutscene = false;
+
+							WeekData.loadTheFirstEnabledMod();
+							MusicBeatState.switchState(new FreeplayState());
+							PlayState.cancelMusicFadeTween();
+							FlxG.sound.playMusic(Paths.music('freakyMenu'));
+							PlayState.chartingMode = false;
+						case "Exit to Menu":
+							PlayState.deathCounter = 0;
+							PlayState.seenCutscene = false;
+
+							WeekData.loadTheFirstEnabledMod();
+							if (PlayState.isStoryMode) {
+								MusicBeatState.switchState(new StoryMenuState());
+							} else {
+								MusicBeatState.switchState(new MainMenuState());
+							}
+							PlayState.cancelMusicFadeTween();
+							FlxG.sound.playMusic(Paths.music('freakyMenu'));
+							PlayState.chartingMode = false;
+						case "Exit Game":
+							Sys.exit(0);
+					}
+					return;
+				}
+
+				menuItems = menuItemsOG;
+				regenMenu();
+			}
+
 			switch (daSelected)
 			{
 				case "Resume":
@@ -182,7 +225,7 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Toggle Practice Mode':
 					PlayState.instance.practiceMode = !PlayState.instance.practiceMode;
 					practiceText.visible = PlayState.instance.practiceMode;
-				case "Restart Song":
+				case "Restart":
 					restartSong();
 				case 'Restart Replay':
 					FlxG.resetState();
@@ -212,16 +255,10 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
-				case "Exit to menu":
-					PlayState.deathCounter = 0;
-					PlayState.seenCutscene = false;
-					if(PlayState.isStoryMode) {
-						MusicBeatState.switchState(new StoryMenuState());
-					} else {
-						MusicBeatState.switchState(new FreeplayState());
-					}
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
-					PlayState.chartingMode = false;
+				case "Exit":
+					menuItems = exitChoices;
+					deleteSkipTimeText();
+					regenMenu();
 			}
 		}
 	}
