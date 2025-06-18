@@ -326,7 +326,7 @@ class NoteOffsetState extends MusicBeatState
 							ClientPrefs.comboOffset[1] = -Math.round((mousePos.y - startMousePos.y) - startComboOffset.y);
 						case 'numscore':
 							ClientPrefs.comboOffset[2] = Math.round((mousePos.x - startMousePos.x) + startComboOffset.x);
-							ClientPrefs.comboOffset[3] = -Math.round((mousePos.y - startMousePos.y) - startComboOffset.y);Add commentMore actions
+							ClientPrefs.comboOffset[3] = -Math.round((mousePos.y - startMousePos.y) - startComboOffset.y);
 					}
 					repositionCombo();
 				}
@@ -487,7 +487,7 @@ class NoteOffsetState extends MusicBeatState
 				case 0: dumbTexts.members[i].text = 'Combo Offset:';
 				case 1: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[4] + ', ' + ClientPrefs.comboOffset[5] + ']';
 				case 2: dumbTexts.members[i].text = 'Rating Offset:';
-				case 3: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[0] + ', ' + ClientPrefs.comboOffset[1] + ']';Add commentMore actions
+				case 3: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[0] + ', ' + ClientPrefs.comboOffset[1] + ']';
 				case 4: dumbTexts.members[i].text = 'Numbers Offset:';
 				case 5: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[2] + ', ' + ClientPrefs.comboOffset[3] + ']';
 			}

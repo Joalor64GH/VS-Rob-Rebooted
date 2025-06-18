@@ -17,7 +17,7 @@ class CreditsState extends MusicBeatState
 			['Engine Contributors'],
 			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i'],
 			['gedehari', 'sqirra', 'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari'],
-			['crowplexus', 'crowplexus', 'Contributor', 'https://github.com/crowplexus', 'a1a1a1'],
+			['crowplexus', 'crowplexus', 'Contributor', 'https://github.com/crowplexus'],
 			['TahirKarabekiroglu', 'tahir', 'Contributor', 'https://github.com/TahirKarabekiroglu'],
 			['EliteMasterEric', 'mastereric', 'Runtime Shaders support', 'https://twitter.com/EliteMasterEric'],
 			['PolybiusProxy', 'proxy', 'Creator of hxCodec', 'https://twitter.com/polybiusproxy'],
