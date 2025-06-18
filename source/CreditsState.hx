@@ -8,35 +8,33 @@ class CreditsState extends MusicBeatState
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [
 			['Psych Engine Team'],
-			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '444444'],
-			['Riveren', 'riveren', 'Main Artist/Animator of Psych Engine', 'https://twitter.com/riverennn', '14967B'],
+			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_'],
+			['Riveren', 'riveren', 'Main Artist/Animator of Psych Engine', 'https://twitter.com/riverennn'],
 			[''],
 			['Former Engine Members'],
-			['bbpanzu', 'bb', 'Ex-Programmer of Psych Engine', 'https://twitter.com/bbsub3', '3E813A'],
+			['bbpanzu', 'bb', 'Ex-Programmer of Psych Engine', 'https://twitter.com/bbsub3'],
 			[''],
 			['Engine Contributors'],
-			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i', '9E29CF'],
-			['gedehari', 'sqirra', 'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari', 'E1843A'],
+			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i'],
+			['gedehari', 'sqirra', 'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari'],
 			['crowplexus', 'crowplexus', 'Contributor', 'https://github.com/crowplexus', 'a1a1a1'],
-			['TahirKarabekiroglu', 'tahir', 'Contributor', 'https://github.com/TahirKarabekiroglu', 'A04397'],
-			['EliteMasterEric', 'mastereric', 'Runtime Shaders support', 'https://twitter.com/EliteMasterEric', 'FFBD40'],
-			['PolybiusProxy', 'proxy', 'Creator of hxCodec', 'https://twitter.com/polybiusproxy', 'DCD294'],
-			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs\nExtension WebM Fork', 'https://twitter.com/kade0912', '64A250'],
-			['Keoiki', 'keoiki', 'Note Splash Animations\nLatin Support', 'https://twitter.com/Keoiki_', 'D2D2D2'],
-			['Nebula the Zorua', 'nebula', 'Contributor', 'https://twitter.com/Nebula_Zorua', '7D40B2'],
-			['Smokey', 'smokey', 'Sprite Atlas Support', 'https://twitter.com/Smokey_5_', '483D92'],
+			['TahirKarabekiroglu', 'tahir', 'Contributor', 'https://github.com/TahirKarabekiroglu'],
+			['EliteMasterEric', 'mastereric', 'Runtime Shaders support', 'https://twitter.com/EliteMasterEric'],
+			['PolybiusProxy', 'proxy', 'Creator of hxCodec', 'https://twitter.com/polybiusproxy'],
+			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs\nExtension WebM Fork', 'https://twitter.com/kade0912'],
+			['Keoiki', 'keoiki', 'Note Splash Animations', 'https://twitter.com/Keoiki_'],
+			['Nebula the Zorua', 'nebula', 'Contributor', 'https://twitter.com/Nebula_Zorua'],
+			['Smokey', 'smokey', 'Sprite Atlas Support', 'https://twitter.com/Smokey_5_'],
 			[''],
 			["The Funkin' Crew Inc"],
-			['ninjamuffin99', 'ninjamuffin99', "Programmer/Creator of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', 'CF2D2D'],
-			['PhantomArcade', 'phantomarcade', "Animator of Friday Night Funkin'", 'https://twitter.com/PhantomArcade3K', 'FADC45'],
-			['evilsk8r', 'evilsk8r', "Artist of Friday Night Funkin'", 'https://twitter.com/evilsk8r', '5ABD4B'],
-			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite', '378FC7']
+			['ninjamuffin99', 'ninjamuffin99', "Programmer/Creator of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99'],
+			['PhantomArcade', 'phantomarcade', "Animator of Friday Night Funkin'", 'https://twitter.com/PhantomArcade3K'],
+			['evilsk8r', 'evilsk8r', "Artist of Friday Night Funkin'", 'https://twitter.com/evilsk8r'],
+			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite']
 	];
 
 	var bg:FlxSprite;
 	var descText:FlxText;
-	var intendedColor:FlxColor;
-	var colorTween:FlxTween;
 	var descBox:AttachedSprite;
 
 	var camFollow:FlxObject;
@@ -92,8 +90,6 @@ class CreditsState extends MusicBeatState
 		descBox.sprTracker = descText;
 		add(descText);
 
-		bg.color = CoolUtil.colorFromString(creditsStuff[curSelected][4]);
-		intendedColor = bg.color;
 		changeSelection();
 		FlxG.camera.follow(camFollow, null, 0.15);
 		super.create();
@@ -158,20 +154,6 @@ class CreditsState extends MusicBeatState
 		do {
 			curSelected = FlxMath.wrap(curSelected + change, 0, creditsStuff.length - 1);
 		} while(unselectableCheck(curSelected));
-
-		var newColor:FlxColor = CoolUtil.colorFromString(creditsStuff[curSelected][4]);
-		trace('The BG color is: $newColor');
-		if(newColor != intendedColor) {
-			if(colorTween != null) {
-				colorTween.cancel();
-			}
-			intendedColor = newColor;
-			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
-				onComplete: function(twn:FlxTween) {
-					colorTween = null;
-				}
-			});
-		}
 
 		grpOptions.forEach(function(txt:FlxText)
 		{
