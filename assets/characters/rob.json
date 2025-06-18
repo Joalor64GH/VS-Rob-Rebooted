@@ -41,15 +41,13 @@
 			"name": "rob down0"
 		}
 	],
-	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/rob",
 	"position": [0, 110],
 	"healthicon": "bf",
-	"flip_x": true,
+	"flip_x": false,
 	"healthbar_colors": [41, 128, 185],
 	"camera_position": [-90, -40],
 	"sing_duration": 4,
-	"scale": 1,
-	"_editor_isPlayer": false
+	"scale": 1
 }

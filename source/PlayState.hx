@@ -2814,10 +2814,12 @@ class PlayState extends MusicBeatState
 			numScore.velocity.x = FlxG.random.float(-5, 5);
 			numScore.visible = (!ClientPrefs.hideHud && showComboNum);
 
-			if(combo >= 0)
+			if (combo >= 0)
 				insert(members.indexOf(strumLineNotes), numScore);
-			if(combo >= 10)
+			if (combo >= 10)
 				insert(members.indexOf(strumLineNotes), comboSpr);
+
+			insert(members.indexOf(strumLineNotes), rating);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
 				onComplete: function(tween:FlxTween)
