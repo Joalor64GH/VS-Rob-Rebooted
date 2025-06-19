@@ -206,6 +206,9 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
+	// Precision
+	public var precisions:Array<FlxText> = [];
+
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
 	public static var seenCutscene:Bool = false;
@@ -1085,6 +1088,30 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	function camPanRoutine(anim:String = 'singUP', who:String = 'bf'):Void {
+		if (SONG.notes[curSection] != null)
+		{
+			var fps:Float = FlxG.updateFramerate;
+			final bfCanPan:Bool = SONG.notes[curSection].mustHitSection;
+			final dadCanPan:Bool = !SONG.notes[curSection].mustHitSection;
+			var clear:Bool = false;
+			switch (who) {
+				case 'bf' | 'boyfriend': clear = bfCanPan;
+				case 'oppt' | 'dad': clear = dadCanPan;
+			}
+			if (clear) {
+				if (fps == 0) fps = 1;
+				switch (anim.split('-')[0])
+				{
+					case 'singUP': moveCamTo[1] = -40 * ClientPrefs.panIntensity * 240 / fps;
+					case 'singDOWN': moveCamTo[1] = 40 * ClientPrefs.panIntensity * 240 / fps;
+					case 'singLEFT': moveCamTo[0] = -40 * ClientPrefs.panIntensity * 240 / fps;
+					case 'singRIGHT': moveCamTo[0] = 40 * ClientPrefs.panIntensity * 240 / fps;
+				}
+			}
+		}
+	}
+
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
 
@@ -1770,8 +1797,8 @@ class PlayState extends MusicBeatState
 		}
 
 		if(!inCutscene) {
-			var lerpVal:Float = CoolUtil.boundTo(elapsed * 2.4 * cameraSpeed, 0, 1);
-			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
+			final lerpVal:Float = CoolUtil.boundTo(elapsed * 2.4 * cameraSpeed, 0, 1);
+			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x + moveCamTo[0] / 102, camFollow.x + moveCamTo[0] / 102, lerpVal), FlxMath.lerp(camFollowPos.y + moveCamTo[1] / 102, camFollow.y + moveCamTo[1] / 102, lerpVal));
 			if(!startingSong && !endingSong && boyfriend.animation.curAnim.name.startsWith('idle')) {
 				boyfriendIdleTime += elapsed;
 				if(boyfriendIdleTime >= 0.15) { // Kind of a mercy thing for making the achievement easier to get as it's apparently frustrating to some playerss
@@ -1780,6 +1807,9 @@ class PlayState extends MusicBeatState
 			} else {
 				boyfriendIdleTime = 0;
 			}
+			final panLerpVal:Float = CoolUtil.boundTo(elapsed * 4.4 * cameraSpeed, 0, 1);
+			moveCamTo[0] = FlxMath.lerp(moveCamTo[0], 0, panLerpVal);
+			moveCamTo[1] = FlxMath.lerp(moveCamTo[1], 0, panLerpVal);
 		}
 
 		super.update(elapsed);
@@ -2750,6 +2780,16 @@ class PlayState extends MusicBeatState
 		comboSpr.y -= ClientPrefs.comboOffset[5];
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
 
+		for (i in precisions) remove(i);
+
+		var precision:FlxText = new FlxText(0, (ClientPrefs.downScroll ? playerStrums.members[0].y + 110 : playerStrums.members[0].y - 40), '' + Math.round(Conductor.songPosition - note.strumTime) + ' ms');
+		precision.cameras = [camOther];
+		if (ClientPrefs.downScroll) precision.y -= 3; else precision.y += 3;
+		precision.x = (playerStrums.members[1].x + playerStrums.members[1].width / 2) - precision.width / 2;
+		precision.setFormat(Paths.font("vcr.ttf"), 21, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		FlxTween.tween(precision, {y: (ClientPrefs.downScroll ? precision.y + 3 : precision.y - 3)}, 0.01, {ease: FlxEase.bounceOut});
+		precisions.push(precision);
+
 		if (!PlayState.isPixelStage)
 		{
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
@@ -2810,6 +2850,7 @@ class PlayState extends MusicBeatState
 				insert(members.indexOf(strumLineNotes), comboSpr);
 
 			insert(members.indexOf(strumLineNotes), rating);
+			if (ClientPrefs.displayMilliseconds) add(precision);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
 				onComplete: function(tween:FlxTween)
@@ -2827,6 +2868,12 @@ class PlayState extends MusicBeatState
 		FlxTween.tween(rating, {alpha: 0}, 0.2, {
 			startDelay: Conductor.crochet * 0.001
 		});
+
+		if (ClientPrefs.displayMilliseconds) {
+			FlxTween.tween(precision, {alpha: 0}, 0.2, {
+				startDelay: Conductor.crochet * 0.001
+			});
+		}
 
 		FlxTween.tween(comboSpr, {alpha: 0}, 0.2, {
 			onComplete: function(tween:FlxTween)
@@ -2896,9 +2943,20 @@ class PlayState extends MusicBeatState
 
 					}
 				}
-				else if (canMiss) {
-					noteMissPress(key);
-					callOnLuas('noteMissPress', [key]);
+				else {
+					if (ClientPrefs.ghostTapAnim)
+					{
+						boyfriend.playAnim(singAnimations[Std.int(Math.abs(key))], true);
+						if (ClientPrefs.cameraPanning) camPanRoutine(singAnimations[Std.int(Math.abs(key))], 'bf');
+						boyfriend.holdTimer = 0;
+					}
+
+					if (ClientPrefs.cameraPanning) camPanRoutine(singAnimations[Std.int(Math.abs(key))], 'dad');
+
+					if (canMiss) {
+						noteMissPress(key);
+						callOnLuas('noteMissPress', [key]);
+					}
 				}
 
 				// I dunno what you need this for but here you go
@@ -3142,6 +3200,7 @@ class PlayState extends MusicBeatState
 
 			if(char != null)
 			{
+				if (ClientPrefs.cameraPanning) inline camPanRoutine(animToPlay, 'dad');
 				char.playAnim(animToPlay, true);
 				char.holdTimer = 0;
 			}
@@ -3227,6 +3286,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
+					if (ClientPrefs.cameraPanning) inline camPanRoutine(animToPlay, 'bf');
 					boyfriend.playAnim(animToPlay + daAlt, true);
 					boyfriend.holdTimer = 0;
 				}

@@ -84,19 +84,9 @@ class ControlsSubState extends MusicBeatSubstate {
 		for (i in 0...optionShit.length) {
 			var isCentered:Bool = false;
 			var isDefaultKey:Bool = (optionShit[i][0] == defaultKey);
-			if(unselectableCheck(i, true)) {
-				isCentered = true;
-			}
 
 			var optionText:Alphabet = new Alphabet(0, (10 * i), optionShit[i][0], (!isCentered || isDefaultKey), false);
 			optionText.isMenuItem = true;
-			if(isCentered) {
-				optionText.screenCenter(X);
-				optionText.forceX = optionText.x;
-				optionText.yAdd = -55;
-			} else {
-				optionText.forceX = 200;
-			}
 			optionText.yMult = 60;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
@@ -585,15 +575,14 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeFramerate;
 		#end
 
-		/*
-		var option:Option = new Option('Persistent Cached Data',
-			'If checked, images loaded will stay in memory\nuntil the game is closed, this increases memory usage,\nbut basically makes reloading times instant.',
-			'imagesPersist',
-			'bool',
-			false);
-		option.onChange = onChangePersistentData; //Persistent Cached Data changes FlxGraphic.defaultPersist
+		var option:Option = new Option('Colorblind Filter:',
+			"Filters for colorblind people.",
+			'colorBlindFilter',
+			'string',
+			'None',
+			['None', 'Deuteranopia', 'Protanopia', 'Tritanopia']);
 		addOption(option);
-		*/
+		option.onChange = () -> Colorblind.updateFilter();
 
 		super();
 	}
@@ -853,7 +842,7 @@ class NotesSubState extends MusicBeatSubstate
 		btn8.updateHitbox();
 		add(btn8);
 
-		rgbText = new Alphabet(posX + 720, 0, "Red        Green      Blue", false);
+		rgbText = new Alphabet(posX + 720, 0, "Red Green Blue", false);
 		add(rgbText);
 
 		changeSelection();

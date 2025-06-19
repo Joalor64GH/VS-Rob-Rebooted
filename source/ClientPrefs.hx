@@ -126,6 +126,7 @@ class ClientPrefs {
 		FlxG.save.data.cameraPanning = cameraPanning;
 		FlxG.save.data.panIntensity = panIntensity;
 		FlxG.save.data.displayMilliseconds = displayMilliseconds;
+		FlxG.save.data.colorBlindFilter = colorBlindFilter;
 	
 		FlxG.save.flush();
 
@@ -239,6 +240,9 @@ class ClientPrefs {
 			cameraPanning = FlxG.save.data.cameraPanning;
 		if(FlxG.save.data.panIntensity != null)
 			panIntensity = FlxG.save.data.panIntensity;
+		
+		if (FlxG.save.data.colorBlindFilter != null)
+			colorBlindFilter = FlxG.save.data.colorBlindFilter;
 
 		if(FlxG.save.data.gameplaySettings != null)
 		{
