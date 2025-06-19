@@ -1089,6 +1089,7 @@ class PlayState extends MusicBeatState
 	}
 
 	function camPanRoutine(anim:String = 'singUP', who:String = 'bf'):Void {
+		var curSection:Int = Math.floor(curStep / 16);
 		if (SONG.notes[curSection] != null)
 		{
 			var fps:Float = FlxG.updateFramerate;
