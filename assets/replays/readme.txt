@@ -1,1 +1,0 @@
-Your replays after finishing a song will be saved here!

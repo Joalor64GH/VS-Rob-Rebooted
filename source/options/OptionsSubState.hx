@@ -345,6 +345,12 @@ class ControlsSubState extends MusicBeatSubstate {
 
 class GameplaySettingsSubState extends BaseOptionsMenu
 {
+	var windowBar:FlxSprite;
+	var windowOptions:Array<Option> = [];
+	final windowDefaultMaxes:Array<Int> = [45, 90, 135, 205];
+	final windowDefaultMins:Array<Int> = [16, 46, 91, 136];
+	final windowColours = [0xbf00ff00, 0xbfffaa00, 0xbfff0000, 0xbfff00ff];
+
 	public function new()
 	{
 		title = 'Gameplay Settings';
@@ -372,11 +378,44 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Display Milliseconds',
+			'If checked, displays your note hit offset in milliseconds.',
+			'displayMilliseconds',
+			'bool',
+			true);
+		addOption(option);
+
 		var option:Option = new Option('Ghost Tapping',
 			"If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.",
 			'ghostTapping',
 			'bool',
 			true);
+		addOption(option);
+
+		var option:Option = new Option('Ghost Tap Animation',
+			'If checked, plays player one\'s anim when ghost tapping is active.',
+			'ghostTapAnim',
+			'bool',
+			false);
+		addOption(option);
+
+		var option:Option = new Option('Camera Movement',
+			'If checked, move the camera depending the note that was hit.',
+			'cameraPanning',
+			'bool',
+			true);
+		addOption(option);
+
+		var option:Option = new Option('Camera Pan Intensity:', //Name
+			'Changes how much the camera pans when Camera Movement is turned on.',
+			'panIntensity',
+			'float',
+			1);
+		option.scrollSpeed = 2;
+		option.minValue = 0.01;
+		option.maxValue = 10;
+		option.changeValue = 0.1;
+		option.displayFormat = '%vX';
 		addOption(option);
 
 		var option:Option = new Option('Disable Reset Button',
@@ -416,9 +455,9 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			45);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 15;
-		option.minValue = 15;
-		option.maxValue = 45;
+		windowOptions.push(option);
 		addOption(option);
+		option.onChange = onChangeHitWindow;
 
 		var option:Option = new Option('Good Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.',
@@ -427,9 +466,9 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			90);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 30;
-		option.minValue = 15;
-		option.maxValue = 90;
+		windowOptions.push(option);
 		addOption(option);
+		option.onChange = onChangeHitWindow;
 
 		var option:Option = new Option('Bad Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.',
@@ -438,9 +477,20 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			135);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 60;
-		option.minValue = 15;
-		option.maxValue = 135;
+		windowOptions.push(option);
 		addOption(option);
+		option.onChange = onChangeHitWindow;
+
+		var option:Option = new Option('Shit Hit Window',
+			'Changes the amount of time you have\nfor hitting a "Shit" in milliseconds.',
+			'shitWindow',
+			'int',
+			205);
+		option.displayFormat = '%vms';
+		option.scrollSpeed = 60;
+		windowOptions.push(option);
+		addOption(option);
+		option.onChange = onChangeHitWindow;
 
 		var option:Option = new Option('Safe Frames',
 			'Changes how many frames you have for\nhitting a note earlier or late.',
@@ -454,6 +504,46 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		super();
+		
+		windowBar = new FlxSprite((FlxG.width / 4) * 3 + 150, FlxG.height / 4 - 100).makeGraphic(80, 220, 0x00ffffff);
+		windowBar.visible = false;
+		windowBar.setGraphicSize(80, 440);
+		windowBar.updateHitbox();
+		windowBar.antialiasing = false;
+		insert(members.indexOf(descBox) - 1, windowBar);
+
+		onChangeHitWindow();
+	}
+
+	override function changeSelection(change:Int = 0) {
+		super.changeSelection(change);
+
+		if (windowBar != null) windowBar.visible = (optionsArray[curSelected].name.contains('Hit Window'));
+	}
+
+	function onChangeHitWindow()
+	{
+		var prevLine:Float = 0;
+		for (i => option in windowOptions) {
+			option.minValue = windowDefaultMins[i];
+			option.maxValue = windowDefaultMaxes[i];
+			if (windowOptions[i - 1] != null) {
+				if (windowOptions[i-1].maxValue > option.minValue) option.minValue = windowOptions[i - 1].maxValue;
+			}
+			if (windowOptions[i + 1] != null) {
+				if (windowOptions[i + 1].minValue < option.maxValue) option.maxValue = windowOptions[i + 1].minValue;
+			}
+			var pixels = windowBar.pixels;
+			for (y in 0...pixels.height) {
+				if (y / pixels.height <= option.getValue() / pixels.height && y / pixels.height > prevLine)
+					for (x in 0...pixels.width)
+						pixels.setPixel32(x, y, windowColours[i]);
+					else if (y / pixels.height > option.getValue() / pixels.height)
+						for (x in 0...pixels.width)
+							pixels.setPixel32(x, y, windowColours[windowColours.length - 1]);
+			}
+			prevLine = option.getValue() / pixels.height;
+		}
 	}
 }
 

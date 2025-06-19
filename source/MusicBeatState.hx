@@ -44,6 +44,11 @@ class MusicBeatState extends FlxUIState
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 
+		#if debug
+		if (FlxG.keys.justPressed.F5)
+			FlxG.resetState();
+		#end
+
 		super.update(elapsed);
 	}
 

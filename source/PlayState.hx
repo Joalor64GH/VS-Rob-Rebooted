@@ -1,5 +1,6 @@
 package;
 
+import haxe.ds.Vector as HaxeVector;
 import flixel.graphics.FlxGraphic;
 #if desktop
 import Discord.DiscordClient;
@@ -58,8 +59,6 @@ import Character;
 import sys.FileSystem;
 #end
 
-import ReplayState.ReplayPauseSubstate;
-
 #if VIDEOS_ALLOWED
 #if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as MP4Handler;
 #elseif (hxCodec >= "2.6.1") import hxcodec.VideoHandler as MP4Handler;
@@ -103,15 +102,9 @@ class PlayState extends MusicBeatState
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
-	#if (haxe >= "4.0.0")
 	public var boyfriendMap:Map<String, Boyfriend> = new Map();
 	public var dadMap:Map<String, Character> = new Map();
 	public var gfMap:Map<String, Character> = new Map();
-	#else
-	public var boyfriendMap:Map<String, Boyfriend> = new Map<String, Boyfriend>();
-	public var dadMap:Map<String, Character> = new Map<String, Character>();
-	public var gfMap:Map<String, Character> = new Map<String, Character>();
-	#end
 
 	public var BF_X:Float = 770;
 	public var BF_Y:Float = 100;
@@ -258,8 +251,6 @@ class PlayState extends MusicBeatState
 	// Less laggy controls
 	private var keysArray:Array<Dynamic>;
 
-	var inReplay:Bool;
-
 	public var comboFunction:Void->Void = null;
 
 	var nps:Int = 0;
@@ -268,20 +259,14 @@ class PlayState extends MusicBeatState
 
 	var smoothHealth:Float = 1;
 
+	var moveCamTo:HaxeVector<Float> = new HaxeVector(2);
+
 	override public function create()
 	{
 		Paths.clearStoredMemory();
 
 		// for lua
 		instance = this;
-
-		if (!inReplay)
-		{
-			ReplayState.hits = [];
-			ReplayState.miss = [];
-			ReplayState.judgements = [];
-			ReplayState.sustainHits = [];
-		}
 
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -1237,6 +1222,20 @@ class PlayState extends MusicBeatState
 							}
 						});
 						FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
+						strumLineNotes.forEachAlive(function(strum:FlxSprite) {
+							FlxTween.tween(strum, {angle: 360}, Conductor.crochet / 1000 * 2, {ease: FlxEase.cubeInOut});
+						});
+						if (boyfriend != null && boyfriend.animOffsets.exists('hey')) {
+							boyfriend.playAnim('hey', true);
+							boyfriend.specialAnim = true;
+							boyfriend.heyTimer = 0.6;
+						}
+
+						if (gf != null && gf.animOffsets.exists('cheer')) {
+							gf.playAnim('cheer', true);
+							gf.specialAnim = true;
+							gf.heyTimer = 0.6;
+						}
 					case 4:
 				}
 
@@ -1755,6 +1754,21 @@ class PlayState extends MusicBeatState
 		callOnScripts('update', [elapsed]);
 		callOnLuas('onUpdate', [elapsed]);
 
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			if (boyfriend != null && boyfriend.animOffsets.exists('hey')) {
+				boyfriend.playAnim('hey', true);
+				boyfriend.specialAnim = true;
+				boyfriend.heyTimer = 0.6;
+			}
+
+			if (gf != null && gf.animOffsets.exists('cheer')) {
+				gf.playAnim('cheer', true);
+				gf.specialAnim = true;
+				gf.heyTimer = 0.6;
+			}
+		}
+
 		if(!inCutscene) {
 			var lerpVal:Float = CoolUtil.boundTo(elapsed * 2.4 * cameraSpeed, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
@@ -1818,10 +1832,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.music.pause();
 					vocals.pause();
 				}
-				if (inReplay)
-					openSubState(new ReplayPauseSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				else
-					openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		
 				#if desktop
 				DiscordClient.changePresence(detailsPausedText, SONG.song, iconP2.getCharacter());
@@ -2492,19 +2503,6 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong():Void
 	{
-		#if sys
-		if (!inReplay)
-		{
-			final files:Array<String> = CoolUtil.coolPathArray(Paths.getPreloadPath('replays/'));
-			final song:String = SONG.song.coolSongFormatter().toLowerCase();
-			var length:Null<Int> = null;
-
-			length = (files == null) ? 0 : files.length;
-
-			File.saveContent(Paths.getPreloadPath('replays/$song ${length}.json'), ReplayState.stringify());
-		}
-		#end
-
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;
@@ -2546,12 +2544,7 @@ class PlayState extends MusicBeatState
 				#end
 			}
 
-			if (inReplay)
-			{
-				MusicBeatState.switchState(new FreeplayState());
-				return;
-			}
-			else if (chartingMode)
+			if (chartingMode)
 			{
 				openChartEditor();
 				return;
@@ -2651,7 +2644,7 @@ class PlayState extends MusicBeatState
 	public var showComboNum:Bool = true;
 	public var showRating:Bool = true;
 
-	private function popUpScore(?note:Note, ?optionalRating:Float):Void
+	private function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
@@ -2668,15 +2661,6 @@ class PlayState extends MusicBeatState
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
-
-		if (!inReplay)
-		{
-			ReplayState.hits.push(note.strumTime);
-			ReplayState.judgements.push(noteDiff);
-		}
-
-		if (optionalRating != null)
-			noteDiff = optionalRating;
 
 		//tryna do MS based judgment due to popular demand
 		var daRating:String = Conductor.judgeNote(note, noteDiff);
@@ -2912,7 +2896,7 @@ class PlayState extends MusicBeatState
 
 					}
 				}
-				else if (canMiss && !ClientPrefs.ghostTapping) {
+				else if (canMiss) {
 					noteMissPress(key);
 					callOnLuas('noteMissPress', [key]);
 				}
@@ -3089,11 +3073,6 @@ class PlayState extends MusicBeatState
 	{
 		if (!boyfriend.stunned)
 		{
-			if (!inReplay)
-			{
-				ReplayState.miss.push([Std.int(Conductor.songPosition), direction]);
-			}
-
 			health -= 0.05 * healthLoss;
 			if(instakillOnMiss)
 			{
@@ -3228,10 +3207,6 @@ class PlayState extends MusicBeatState
 				combo += 1;
 				popUpScore(note);
 				if(combo > 9999) combo = 9999;
-			}
-			else if (!inReplay && note.isSustainNote)
-			{
-				ReplayState.sustainHits.push(Std.int(note.strumTime));
 			}
 
 			health += note.hitHealth * healthGain;
@@ -3559,7 +3534,7 @@ class PlayState extends MusicBeatState
 	#if ACHIEVEMENTS_ALLOWED
 	private function checkForAchievement(achievesToCheck:Array<String> = null):String
 	{
-		if(chartingMode || inReplay) return null;
+		if(chartingMode) return null;
 
 		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false));
 		for (i in 0...achievesToCheck.length) {

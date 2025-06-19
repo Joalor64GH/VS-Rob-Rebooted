@@ -6,7 +6,7 @@ class FreeplayState extends MusicBeatState
         private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	public var controlStrings:Array<CoolSong> = [
-		new CoolSong('Tutorial', 'woah', 'gf'),
+		new CoolSong('Tutorial', 'How to funk!', 'gf'),
 		new CoolSong('Hello Friend', 'When robots...sing?', 'rob')
 	];
 	
@@ -29,8 +29,6 @@ class FreeplayState extends MusicBeatState
 
     	override function create()
 	{
-		controlStrings.push(new CoolSong('Test', 'omg real??', 'bf-pixel'));
-
 		menuBG = new FlxSprite().loadGraphic(Paths.image('mainmenu/bg_msn'));
         	menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
@@ -85,7 +83,7 @@ class FreeplayState extends MusicBeatState
 		topPanel.alpha = 0.6;
 		add(topPanel);
 
-		var controlsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "R - RESET SCORE // CTRL - GAMEPLAY CHANGERS // ALT - REPLAYS", 32);
+		var controlsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "R - RESET SCORE // CTRL - GAMEPLAY CHANGERS", 32);
 		controlsTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		controlsTxt.screenCenter(X);
 		controlsTxt.scrollFactor.set();
@@ -177,10 +175,6 @@ class FreeplayState extends MusicBeatState
 			openSubState(new ResetScoreSubState(controlStrings[curSelected].name, controlStrings[curSelected].icon));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
-		#if sys
-		else if (FlxG.keys.justPressed.ALT)
-			MusicBeatState.switchState(new ReplaySelectState(controlStrings[curSelected].name));
-		#end
 	}
 
 	function changeSelection(change:Int = 0)

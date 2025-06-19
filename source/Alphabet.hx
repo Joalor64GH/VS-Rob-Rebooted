@@ -51,8 +51,6 @@ class Alphabet extends FlxSpriteGroup
 
 	public var xTo:Int = 100;
 
-	public var menuType(default, set):String;
-
 	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false, ?typingSpeed:Float = 0.05, ?textSize:Float = 1)
 	{
 		super(x, y);
@@ -356,20 +354,13 @@ class Alphabet extends FlxSpriteGroup
 		if (isMenuItem)
 		{
 			var lerpVal:Float = CoolUtil.boundTo(elapsed * 9.6, 0, 1);
-			switch (menuType)
-			{
-				case 'Centered':
-					y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.5), 0.32);
-
-				default:
-					y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
-					if(forceX != Math.NEGATIVE_INFINITY) {
-						x = forceX;
-					} else {
-						x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
-					}
-					x = (!disableX) ? FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 6) : FlxMath.lerp(x, xTo, elapsed * 6);
+			y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+			if(forceX != Math.NEGATIVE_INFINITY) {
+				x = forceX;
+			} else {
+				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
 			}
+			x = (!disableX) ? FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 6) : FlxMath.lerp(x, xTo, elapsed * 6);
 		}
 
 		if (isMenuItemCentered)
@@ -422,15 +413,6 @@ class Alphabet extends FlxSpriteGroup
 			typeTimer.destroy();
 		}
 		typeTimer = null;
-	}
-
-	inline function set_menuType(value:String)
-	{
-		if (value == 'Centered')
-			screenCenter(X);
-
-		menuType = value;
-		return value;
 	}
 }
 

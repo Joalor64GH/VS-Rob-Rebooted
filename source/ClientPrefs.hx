@@ -11,8 +11,6 @@ class ClientPrefs {
 	public static var noteSplashes:Bool = true;
 	public static var lowQuality:Bool = false;
 	public static var framerate:Int = 60;
-	public static var cursing:Bool = true;
-	public static var violence:Bool = true;
 	public static var camZooms:Bool = true;
 	public static var hideHud:Bool = false;
 	public static var noteOffset:Int = 0;
@@ -26,6 +24,11 @@ class ClientPrefs {
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
+	public static var colorBlindFilter:String = 'None';
+	public static var ghostTapAnim:Bool = true;
+	public static var cameraPanning:Bool = true;
+	public static var panIntensity:Float = 1;
+	public static var displayMilliseconds:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -52,6 +55,7 @@ class ClientPrefs {
 	public static var sickWindow:Int = 45;
 	public static var goodWindow:Int = 90;
 	public static var badWindow:Int = 135;
+	public static var shitWindow:Int = 205;
 	public static var safeFrames:Float = 10;
 
 	//Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
@@ -95,8 +99,6 @@ class ClientPrefs {
 		FlxG.save.data.noteSplashes = noteSplashes;
 		FlxG.save.data.lowQuality = lowQuality;
 		FlxG.save.data.framerate = framerate;
-		//FlxG.save.data.cursing = cursing;
-		//FlxG.save.data.violence = violence;
 		FlxG.save.data.camZooms = camZooms;
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
@@ -114,11 +116,16 @@ class ClientPrefs {
 		FlxG.save.data.sickWindow = sickWindow;
 		FlxG.save.data.goodWindow = goodWindow;
 		FlxG.save.data.badWindow = badWindow;
+		FlxG.save.data.shitWindow = shitWindow;
 		FlxG.save.data.safeFrames = safeFrames;
 		FlxG.save.data.gameplaySettings = gameplaySettings;
 		FlxG.save.data.controllerMode = controllerMode;
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.pauseMusic = pauseMusic;
+		FlxG.save.data.ghostTapAnim = ghostTapAnim;
+		FlxG.save.data.cameraPanning = cameraPanning;
+		FlxG.save.data.panIntensity = panIntensity;
+		FlxG.save.data.displayMilliseconds = displayMilliseconds;
 	
 		FlxG.save.flush();
 
@@ -164,12 +171,6 @@ class ClientPrefs {
 				FlxG.updateFramerate = framerate;
 			}
 		}
-		/*if(FlxG.save.data.cursing != null) {
-			cursing = FlxG.save.data.cursing;
-		}
-		if(FlxG.save.data.violence != null) {
-			violence = FlxG.save.data.violence;
-		}*/
 		if(FlxG.save.data.camZooms != null) {
 			camZooms = FlxG.save.data.camZooms;
 		}
@@ -213,6 +214,9 @@ class ClientPrefs {
 		if(FlxG.save.data.badWindow != null) {
 			badWindow = FlxG.save.data.badWindow;
 		}
+		if(FlxG.save.data.shitWindow != null) {
+			shitWindow = FlxG.save.data.shitWindow;
+		}
 		if(FlxG.save.data.safeFrames != null) {
 			safeFrames = FlxG.save.data.safeFrames;
 		}
@@ -225,6 +229,17 @@ class ClientPrefs {
 		if(FlxG.save.data.pauseMusic != null) {
 			pauseMusic = FlxG.save.data.pauseMusic;
 		}
+
+		if(FlxG.save.data.displayMilliseconds != null)
+			displayMilliseconds = FlxG.save.data.displayMilliseconds;
+
+		if(FlxG.save.data.ghostTapAnim != null)
+			ghostTapAnim = FlxG.save.data.ghostTapAnim;
+		if(FlxG.save.data.cameraPanning != null)
+			cameraPanning = FlxG.save.data.cameraPanning;
+		if(FlxG.save.data.panIntensity != null)
+			panIntensity = FlxG.save.data.panIntensity;
+
 		if(FlxG.save.data.gameplaySettings != null)
 		{
 			var savedMap:Map<String, Dynamic> = FlxG.save.data.gameplaySettings;
