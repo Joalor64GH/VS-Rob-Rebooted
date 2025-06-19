@@ -2697,7 +2697,7 @@ class ChartingState extends MusicBeatState
 	function loadJson(song:String):Void
 	{
 		PlayState.SONG = Song.loadFromJson(song.toLowerCase());
-		MusicBeatState.resetState();
+		FlxG.resetState();
 	}
 
 	function autosaveSong():Void

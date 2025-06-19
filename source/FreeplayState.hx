@@ -6,7 +6,8 @@ class FreeplayState extends MusicBeatState
         private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	public var controlStrings:Array<CoolSong> = [
-		new CoolSong('Tutorial', 'woah', 'gf')
+		new CoolSong('Tutorial', 'woah', 'gf'),
+		new CoolSong('Hello Friend', 'When robots...sing?', 'rob')
 	];
 	
 	var lerpScore:Int = 0;
@@ -79,7 +80,7 @@ class FreeplayState extends MusicBeatState
 		descTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(descTxt);
 
-		var topPanel:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 26, FlxColor.BLACK);
+		var topPanel:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 30, FlxColor.BLACK);
 		topPanel.scrollFactor.set();
 		topPanel.alpha = 0.6;
 		add(topPanel);

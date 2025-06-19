@@ -1,12 +1,12 @@
 {
 	"songs": [
-		["Test", "pixel-bf", [146, 113, 253]]
+		["Hello Friend", "rob", [0, 0, 0]]
 	],
 
-	"weekCharacters": ["", "bf", "gf"],
-	"weekBackground": "stage",
+	"weekCharacters": ["", "", ""],
+	"weekBackground": "city",
 
-	"storyName": "Test",
+	"storyName": "Rob the Robot",
 	"weekBefore": "tutorial",
 	"weekName": "Week 1",
 	"startUnlocked": true,

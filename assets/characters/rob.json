@@ -44,7 +44,7 @@
 	"no_antialiasing": false,
 	"image": "characters/rob",
 	"position": [0, 110],
-	"healthicon": "bf",
+	"healthicon": "rob",
 	"flip_x": false,
 	"healthbar_colors": [41, 128, 185],
 	"camera_position": [-90, -40],
