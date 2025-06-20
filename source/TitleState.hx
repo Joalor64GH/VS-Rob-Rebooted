@@ -51,7 +51,7 @@ class TitleState extends MusicBeatState
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
-	var ngSpr:FlxSprite;
+	var isMe:FlxSprite;
 
 	var curWacky:Array<String> = [];
 	
@@ -211,10 +211,6 @@ class TitleState extends MusicBeatState
 		titleText.updateHitbox();
 		add(titleText);
 
-		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.screenCenter();
-		logo.antialiasing = ClientPrefs.globalAntialiasing;
-
 		credGroup = new FlxGroup();
 		add(credGroup);
 		textGroup = new FlxGroup();
@@ -227,13 +223,13 @@ class TitleState extends MusicBeatState
 
 		credTextShit.visible = false;
 
-		ngSpr = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('newgrounds_logo'));
-		add(ngSpr);
-		ngSpr.visible = false;
-		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
-		ngSpr.updateHitbox();
-		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = ClientPrefs.globalAntialiasing;
+		isMe = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('joalor64Icon'));
+		add(isMe);
+		isMe.visible = false;
+		isMe.scale.set(0.4, 0.4);
+		isMe.updateHitbox();
+		isMe.screenCenter(X);
+		isMe.antialiasing = ClientPrefs.globalAntialiasing;
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
@@ -268,6 +264,20 @@ class TitleState extends MusicBeatState
 	{
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
+		
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.fadeOut(0.3);
+			FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function()
+			{
+				#if (sys || desktop)
+				Sys.exit(0);
+				#else
+				System.exit(0);
+				#end
+			}, false);
+		}
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
 
@@ -387,6 +397,8 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
+		FlxTween.tween(FlxG.camera, {zoom:1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+
 		if(logoBl != null) 
 			logoBl.animation.play('bump', true);
 
@@ -408,10 +420,10 @@ class TitleState extends MusicBeatState
 					createCoolText(['Brought to you by']);
 				case 8:
 					addMoreText('Yours Truly');
-					ngSpr.visible = true;
+					isMe.visible = true;
 				case 9:
 					deleteCoolText();
-					ngSpr.visible = false;
+					isMe.visible = false;
 				case 10:
 					createCoolText([curWacky[0]]);
 				case 12:
@@ -437,7 +449,7 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
-			remove(ngSpr);
+			remove(isMe);
 			remove(credGroup);
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 			skippedIntro = true;

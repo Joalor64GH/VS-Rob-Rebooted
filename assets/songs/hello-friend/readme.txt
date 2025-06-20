@@ -1,2 +1,2 @@
 i haven't even finished voices yet lol
-the current voices file is a placeholder
+i'll just chart what i can for now
