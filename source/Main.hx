@@ -60,6 +60,10 @@ class Main extends openfl.display.Sprite
 		if(fpsVar != null)
 			fpsVar.visible = ClientPrefs.showFPS;
 
+		#if (linux || mac)
+		Lib.current.stage.window.setIcon(lime.graphics.Image.fromFile("icon.png"));
+		#end
+
 		#if html5
 		FlxG.autoPause = FlxG.mouse.visible = false;
 		#end

@@ -62,6 +62,7 @@
 	<!-- hxCodec Debug Stuff -->
 	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
 	<haxedef name="HXC_LIBVLC_LOGGING" if="VIDEOS_ALLOWED debug" />
+	<haxedef name="HXVLC_NO_SHARE_DIRECTORY" if="VIDEOS_ALLOWED" />
 
 	<!-- NOTE TO SELF: DISABLE THIS IF ISSUES ARE FOUND -->
 	<haxedef name="LINC_LUA_RELATIVE_DYNAMIC_LIB"/>
@@ -88,6 +89,8 @@
 	<haxedef name="NO_PRECOMPILED_HEADERS"/>
 
 	<!-- _________________________________ Icons _______________________________ -->
+
+	<assets path='art/icons/iconOG.png' rename='icon.png' if="linux || mac" />
 	
 	<icon path="art/icon16.png" size='16'/>
 	<icon path="art/icon32.png" size='32'/>

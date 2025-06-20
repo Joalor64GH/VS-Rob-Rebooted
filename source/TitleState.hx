@@ -156,7 +156,7 @@ class TitleState extends MusicBeatState
 		add(logoBl);
 		logoBl.shader = swagShader.shader;
 
-		titleText = new FlxSprite(100, 576);
+		titleText = new FlxSprite(0, 576);
 		#if (desktop && MODS_ALLOWED)
 		var path = "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
 		if (!FileSystem.exists(path)){
@@ -191,6 +191,7 @@ class TitleState extends MusicBeatState
 		titleText.antialiasing = ClientPrefs.globalAntialiasing;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
+		titleText.screenCenter(X);
 		add(titleText);
 
 		credGroup = new FlxGroup();
@@ -208,7 +209,7 @@ class TitleState extends MusicBeatState
 		isMe = new FlxSprite(0, FlxG.height * 0.50).loadGraphic(Paths.image('joalor64Icon'));
 		add(isMe);
 		isMe.visible = false;
-		isMe.scale.set(0.4, 0.4);
+		isMe.scale.set(0.35, 0.35);
 		isMe.updateHitbox();
 		isMe.screenCenter(X);
 		isMe.antialiasing = ClientPrefs.globalAntialiasing;
