@@ -9,7 +9,6 @@ import flixel.FlxState;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
-import haxe.Json;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 #if MODS_ALLOWED
@@ -29,16 +28,7 @@ import lime.app.Application;
 import openfl.Assets;
 
 using StringTools;
-typedef TitleData =
-{
-	
-	titlex:Float,
-	titley:Float,
-	startx:Float,
-	starty:Float,
-	backgroundSprite:String,
-	bpm:Int
-}
+
 class TitleState extends MusicBeatState
 {
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
@@ -54,8 +44,6 @@ class TitleState extends MusicBeatState
 	var isMe:FlxSprite;
 
 	var curWacky:Array<String> = [];
-	
-	var titleJSON:TitleData;
 
 	var titleTextColors:Array<FlxColor> = [0xFF33FFFF, 0xFF3333CC];
 	var titleTextAlphas:Array<Float> = [1, .64];
@@ -96,9 +84,6 @@ class TitleState extends MusicBeatState
 		hxvlc.util.Handle.init();
 		#end
 		#end
-
-		// IGNORE THIS!!!
-		titleJSON = Json.parse(Paths.getTextFromFile('data/title.json'));
 
 		if(!initialized && FlxG.save.data != null && FlxG.save.data.fullscreen)
 		{
@@ -149,16 +134,12 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		Conductor.bpm = titleJSON.bpm;
+		Conductor.bpm = 102.0;
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite();
-		
-		if (titleJSON.backgroundSprite != null && titleJSON.backgroundSprite.length > 0 && titleJSON.backgroundSprite != "none"){
-			bg.loadGraphic(Paths.image(titleJSON.backgroundSprite));
-		}else{
-			bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		}
+		// bg.loadGraphic(Paths.image('idk_not_yet'));
+		bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
 		logoBl = new FlxSprite();
@@ -175,7 +156,7 @@ class TitleState extends MusicBeatState
 		add(logoBl);
 		logoBl.shader = swagShader.shader;
 
-		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
+		titleText = new FlxSprite(100, 576);
 		#if (desktop && MODS_ALLOWED)
 		var path = "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
 		if (!FileSystem.exists(path)){

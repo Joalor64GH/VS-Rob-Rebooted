@@ -585,15 +585,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeFramerate;
 		#end
 
-		var option:Option = new Option('Colorblind Filter:',
-			"Filters for colorblind people.",
-			'colorBlindFilter',
-			'string',
-			'None',
-			['None', 'Deuteranopia', 'Protanopia', 'Tritanopia']);
-		addOption(option);
-		option.onChange = () -> Colorblind.updateFilter();
-
 		super();
 	}
 
@@ -976,6 +967,22 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool',
 			true);
 		addOption(option);
+
+		var option:Option = new Option('Shaders', //Name
+			'If unchecked, disables shaders.', //Description
+			'shaders', //Save data variable name
+			'bool', //Variable type
+			false); //Default value
+		addOption(option);
+
+		var option:Option = new Option('Colorblind Filter:',
+			"Filters for colorblind people.",
+			'colorBlindFilter',
+			'string',
+			'None',
+			['None', 'Deuteranopia', 'Protanopia', 'Tritanopia']);
+		addOption(option);
+		option.onChange = () -> Colorblind.updateFilter();
 
 		var option:Option = new Option('Camera Zooms',
 			"If unchecked, the camera won't zoom in on a beat hit.",

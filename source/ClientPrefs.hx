@@ -24,6 +24,7 @@ class ClientPrefs {
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
+	public static var shaders:Bool = true;
 	public static var colorBlindFilter:String = 'None';
 	public static var ghostTapAnim:Bool = true;
 	public static var cameraPanning:Bool = true;
@@ -47,7 +48,12 @@ class ClientPrefs {
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
-		'opponentplay' => false
+		'opponentplay' => false,
+		'randommode' => false,
+		'flip' => false,
+		'stairmode' => false,
+		'wavemode' => false,
+		'onekey' => false
 	];
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0, 0, 0];
@@ -126,6 +132,7 @@ class ClientPrefs {
 		FlxG.save.data.cameraPanning = cameraPanning;
 		FlxG.save.data.panIntensity = panIntensity;
 		FlxG.save.data.displayMilliseconds = displayMilliseconds;
+		FlxG.save.data.shaders = shaders;
 		FlxG.save.data.colorBlindFilter = colorBlindFilter;
 	
 		FlxG.save.flush();
@@ -240,7 +247,9 @@ class ClientPrefs {
 			cameraPanning = FlxG.save.data.cameraPanning;
 		if(FlxG.save.data.panIntensity != null)
 			panIntensity = FlxG.save.data.panIntensity;
-		
+
+		if(FlxG.save.data.shaders != null)
+			shaders = FlxG.save.data.shaders;
 		if (FlxG.save.data.colorBlindFilter != null)
 			colorBlindFilter = FlxG.save.data.colorBlindFilter;
 

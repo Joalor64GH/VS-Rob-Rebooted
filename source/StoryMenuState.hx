@@ -146,6 +146,16 @@ class StoryMenuState extends MusicBeatState
 
 		changeWeek();
 
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
+
+		var text:FlxText = new FlxText(0, textBG.y + 4, FlxG.width, "R - RESET WEEK SCORE // CTRL - GAMEPLAY CHANGERS", 18);
+		text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.screenCenter(X);
+		text.scrollFactor.set();
+		add(text);
+
 		super.create();
 	}
 

@@ -55,6 +55,9 @@ import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
 import Character;
+import openfl.filters.ShaderFilter;
+import openfl.display.Shader;
+import Shaders;
 #if sys
 import sys.FileSystem;
 #end
@@ -176,12 +179,25 @@ class PlayState extends MusicBeatState
 	private var updateTime:Bool = true;
 	public static var chartingMode:Bool = false;
 
+	// shader stuff
+	public var shaderUpdates:Array<Float->Void> = [];
+	public var camGameShaders:Array<ShaderEffect> = [];
+	public var camHUDShaders:Array<ShaderEffect> = [];
+	public var camOtherShaders:Array<ShaderEffect> = [];
+
 	//Gameplay settings
 	public var healthGain:Float = 1;
 	public var healthLoss:Float = 1;
 	public var instakillOnMiss:Bool = false;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
+
+	public var randomMode:Bool = false;
+	public var flip:Bool = false;
+	public var stairs:Bool = false;
+	public var waves:Bool = false;
+	public var oneK:Bool = false;
+	public var randomSpeedThing:Bool = false;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
@@ -324,6 +340,11 @@ class PlayState extends MusicBeatState
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
+		randomMode = ClientPrefs.getGameplaySetting('randommode', false);
+		flip = ClientPrefs.getGameplaySetting('flip', false);
+		stairs = ClientPrefs.getGameplaySetting('stairmode', false);
+		waves = ClientPrefs.getGameplaySetting('wavemode', false);
+		oneK = ClientPrefs.getGameplaySetting('onekey', false);
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -979,6 +1000,84 @@ class PlayState extends MusicBeatState
 		}
 		#end
 	}
+
+	public function addShaderToCamera(cam:String,effect:ShaderEffect){ //STOLE FROM ANDROMEDA
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud':
+				camHUDShaders.push(effect);
+				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+				for(i in camHUDShaders){
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other':
+				camOtherShaders.push(effect);
+				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+				for(i in camOtherShaders){
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camOther.setFilters(newCamEffects);
+			case 'camgame' | 'game':
+				camGameShaders.push(effect);
+				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+				for(i in camGameShaders){
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camGame.setFilters(newCamEffects);
+			default:
+				if(modchartSprites.exists(cam)) {
+					Reflect.setProperty(modchartSprites.get(cam),"shader",effect.shader);
+				} else if(modchartTexts.exists(cam)) {
+					Reflect.setProperty(modchartTexts.get(cam),"shader",effect.shader);
+				} else {
+					var OBJ = Reflect.getProperty(PlayState.instance,cam);
+					Reflect.setProperty(OBJ,"shader", effect.shader);
+				}
+		}
+  	}
+
+  	public function removeShaderFromCamera(cam:String,effect:ShaderEffect){
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud': 
+    			camHUDShaders.remove(effect);
+    			var newCamEffects:Array<BitmapFilter>=[];
+    			for(i in camHUDShaders){
+      				newCamEffects.push(new ShaderFilter(i.shader));
+    			}
+    			camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other': 
+				camOtherShaders.remove(effect);
+				var newCamEffects:Array<BitmapFilter>=[];
+				for(i in camOtherShaders){
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camOther.setFilters(newCamEffects);
+			default: 
+				camGameShaders.remove(effect);
+				var newCamEffects:Array<BitmapFilter>=[];
+				for(i in camGameShaders){
+				  	newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camGame.setFilters(newCamEffects);
+		}
+  	}
+
+  	public function clearShaderFromCamera(cam:String){
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud': 
+				camHUDShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other': 
+				camOtherShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camOther.setFilters(newCamEffects);
+			default: 
+				camGameShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camGame.setFilters(newCamEffects);
+		}
+  	}
 	
 	function startCharacterPos(char:Character, ?gfCheck:Bool = false) {
 		if(gfCheck && char.curCharacter.startsWith('gf')) { //IF DAD IS GIRLFRIEND, HE GOES TO HER POSITION
@@ -992,7 +1091,7 @@ class PlayState extends MusicBeatState
 
 	public function startVideo(name:String)
 	{
-		#if (VIDEOS_ALLOWED || WEBM_ALLOWED)
+		#if VIDEOS_ALLOWED
 		inCutscene = true;
 
 		var filepath:String = Paths.video(name);
@@ -1199,7 +1298,7 @@ class PlayState extends MusicBeatState
 
 						countdownThree.screenCenter();
 						countdownThree.antialiasing = antialias;
-						add(countdownThree);
+						insert(members.indexOf(notes), countdownThree);
 						FlxTween.tween(countdownThree, {alpha: 0}, Conductor.crochet / 1000, {
 							ease: FlxEase.cubeInOut,
 							onComplete: function(twn:FlxTween)
@@ -1219,7 +1318,7 @@ class PlayState extends MusicBeatState
 
 						countdownTwo.screenCenter();
 						countdownTwo.antialiasing = antialias;
-						add(countdownTwo);
+						insert(members.indexOf(notes), countdownTwo);
 						FlxTween.tween(countdownTwo, {alpha: 0}, Conductor.crochet / 1000, {
 							ease: FlxEase.cubeInOut,
 							onComplete: function(twn:FlxTween)
@@ -1238,7 +1337,7 @@ class PlayState extends MusicBeatState
 
 						countdownOne.screenCenter();
 						countdownOne.antialiasing = antialias;
-						add(countdownOne);
+						insert(members.indexOf(notes), countdownOne);
 						FlxTween.tween(countdownOne, {alpha: 0}, Conductor.crochet / 1000, {
 							ease: FlxEase.cubeInOut,
 							onComplete: function(twn:FlxTween)
@@ -1259,7 +1358,7 @@ class PlayState extends MusicBeatState
 
 						countdownGo.screenCenter();
 						countdownGo.antialiasing = antialias;
-						add(countdownGo);
+						insert(members.indexOf(notes), countdownGo);
 						FlxTween.tween(countdownGo, {alpha: 0}, Conductor.crochet / 1000, {
 							ease: FlxEase.cubeInOut,
 							onComplete: function(twn:FlxTween)
@@ -1474,6 +1573,37 @@ class PlayState extends MusicBeatState
 			{
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
+
+				if (!randomMode && !flip && !stairs && !waves)
+				{
+					daNoteData = Std.int(songNotes[1] % 4);
+				}
+				if (oneK)
+				{
+					daNoteData = 2;
+				}
+				if (randomMode || randomMode && flip || randomMode && flip && stairs || randomMode && flip && stairs && waves) { //gotta specify that random mode must at least be turned on for this to work
+					daNoteData = FlxG.random.int(0, 3);
+				}
+				if (flip && !stairs && !waves) {
+					daNoteData = Std.int(Math.abs((songNotes[1] % 4) - 3));
+				}
+				if (stairs && !waves) {
+					daNoteData = stair % 4;
+					stair++;
+				}
+				if (waves) {
+					switch (stair % 6)
+					{
+						case 0 | 1 | 2 | 3:
+							daNoteData = stair % 6;
+						case 4:
+							daNoteData = 2;
+						case 5:
+							daNoteData = 1;
+					}
+					stair++;
+				}
 
 				var gottaHitNote:Bool = section.mustHitSection;
 
@@ -2161,6 +2291,11 @@ class PlayState extends MusicBeatState
 		setOnLuas('cameraX', camFollowPos.x);
 		setOnLuas('cameraY', camFollowPos.y);
 		setOnLuas('botPlay', cpuControlled);
+
+		for (i in shaderUpdates) {
+			i(elapsed);
+		}
+
 		callOnLuas('onUpdatePost', [elapsed]);
 	}
 

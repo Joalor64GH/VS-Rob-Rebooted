@@ -8,6 +8,10 @@ import haxe.io.Path;
 
 import debug.FPS;
 
+#if (linux && !debug)
+@:cppInclude('./external/gamemode_client.h')
+@:cppFileCode('#define GAMEMODE_AUTO')
+#end
 class Main extends openfl.display.Sprite
 {
 	public final config:Dynamic = {
