@@ -38,6 +38,7 @@ class TitleState extends MusicBeatState
 	public static var initialized:Bool = false;
 
 	var bg:FlxSprite;
+	var bgCity:FlxSprite;
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -143,14 +144,20 @@ class TitleState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		bg.screenCenter();
 
+		bgCity = new FlxSprite().loadGraphic(Paths.image('title/title_city'));
+		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
+		bgCity.screenCenter();
+
 		logoBl = new FlxSprite().loadGraphic(Paths.image('title/placeholder_logo'));
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
 		logoBl.screenCenter();
+		logoBl.scale.set(0.6, 0.6);
 		logoBl.updateHitbox();
 
 		swagShader = new ColorSwap();
 
 		add(bg);
+		add(bgCity);
 		add(logoBl);
 		logoBl.shader = swagShader.shader;
 
@@ -203,7 +210,7 @@ class TitleState extends MusicBeatState
 
 		credTextShit.visible = false;
 
-		isMe = new FlxSprite(0, FlxG.height * 0.50).loadGraphic(Paths.image('joalor64Icon'));
+		isMe = new FlxSprite(0, FlxG.height * 0.50).loadGraphic(Paths.image('title/joalor64Icon'));
 		add(isMe);
 		isMe.visible = false;
 		isMe.scale.set(0.35, 0.35);
@@ -381,9 +388,6 @@ class TitleState extends MusicBeatState
 		super.beatHit();
 
 		FlxTween.tween(FlxG.camera, {zoom:1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
-
-		if(logoBl != null) 
-			logoBl.animation.play('bump', true);
 
 		if(!closedState) {
 			sickBeats++;

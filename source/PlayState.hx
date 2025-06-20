@@ -750,13 +750,6 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
-		healthTxt = new FlxText(0, healthBarBG.y, FlxG.width, "Health: 50%", 20);
-		healthTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		healthTxt.scrollFactor.set();
-		healthTxt.visible = !ClientPrefs.hideHud;
-		healthTxt.screenCenter(X);
-		add(healthTxt);
-
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.hideHud;
@@ -769,6 +762,13 @@ class PlayState extends MusicBeatState
 		iconP2.alpha = ClientPrefs.healthBarAlpha;
 		add(iconP2);
 		reloadHealthBarColors();
+
+		healthTxt = new FlxText(0, healthBarBG.y - 36, FlxG.width, "Health: 50%", 20);
+		healthTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		healthTxt.scrollFactor.set();
+		healthTxt.visible = !ClientPrefs.hideHud;
+		healthTxt.screenCenter(X);
+		add(healthTxt);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -1975,6 +1975,8 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		smoothHealth = FlxMath.lerp(smoothHealth, health, CoolUtil.boundTo(elapsed * 20, 0, 1));
+
+		healthTxt.text = "Health: " + healthBar.percent + "%";
 
 		if(ratingName == '?') {
 			scoreTxt.text = 'NPS: ' + nps + ' (Max ' + maxNPS + ')'

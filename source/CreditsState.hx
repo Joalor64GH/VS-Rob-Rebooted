@@ -7,6 +7,12 @@ class CreditsState extends MusicBeatState
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['VS Rob'],
+			['Joalor64', 'joalor64', 'Mod Director/Creator, Artist, Programmer, Composer\nBasically Everything', 'https://joalor64gh.github.io/', '00d2e6'],
+			[''],
+			['Thanks to'],
+			['NyxTheShield', 'nyx', 'Boyfriend Soundfont Samples', 'https://github.com/NyxTheShield', '8AE8FF'],
+			[''],
 			['Psych Engine Team'],
 			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '444444'],
 			['Riveren', 'riveren', 'Main Artist/Animator of Psych Engine', 'https://twitter.com/riverennn', '14967B'],
@@ -17,20 +23,18 @@ class CreditsState extends MusicBeatState
 			['Engine Contributors'],
 			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i', '9E29CF'],
 			['gedehari', 'sqirra', 'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari', 'E1843A'],
-			['crowplexus', 'crowplexus', 'Contributor', 'https://github.com/crowplexus', 'a1a1a1'],
-			['TahirKarabekiroglu', 'tahir', 'Contributor', 'https://github.com/TahirKarabekiroglu', 'A04397'],
-			['EliteMasterEric', 'mastereric', 'Runtime Shaders support', 'https://twitter.com/EliteMasterEric', 'FFBD40'],
-			['PolybiusProxy', 'proxy', 'Creator of hxCodec', 'https://twitter.com/polybiusproxy', 'DCD294'],
-			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs\nExtension WebM Fork', 'https://twitter.com/kade0912', '64A250'],
-			['Keoiki', 'keoiki', 'Note Splash Animations\nNew Latin Support', 'https://twitter.com/Keoiki_', 'D2D2D2'],
-			['Nebula the Zorua', 'nebula', 'Contributor', 'https://twitter.com/Nebula_Zorua', '7D40B2'],
+			['MAJigsaw77', 'majigsaw', 'Creator of hxvlc, Base HScript Code', 'https://x.com/MAJigsaw77', '5F5F5F'],
+			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs', 'https://twitter.com/kade0912', '64A250'],
+			['Keoiki', 'keoiki', 'Note Splash Animations', 'https://twitter.com/Keoiki_', 'D2D2D2'],
+			["superpowers04", "superpowers04",	"LUA JIT Fork", "https://x.com/superpowers04", "B957ED"],
 			['Smokey', 'smokey', 'Sprite Atlas Support', 'https://twitter.com/Smokey_5_', '483D92'],
 			[''],
 			["The Funkin' Crew Inc"],
 			['ninjamuffin99', 'ninjamuffin99', "Programmer/Creator of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', 'CF2D2D'],
 			['PhantomArcade', 'phantomarcade', "Animator of Friday Night Funkin'", 'https://twitter.com/PhantomArcade3K', 'FADC45'],
 			['evilsk8r', 'evilsk8r', "Artist of Friday Night Funkin'", 'https://twitter.com/evilsk8r', '5ABD4B'],
-			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite', '378FC7']
+			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite', '378FC7'],
+			['Thank you for playing!']
 		];
 
 	var bg:FlxSprite;
