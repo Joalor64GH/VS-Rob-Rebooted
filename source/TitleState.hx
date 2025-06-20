@@ -37,6 +37,8 @@ class TitleState extends MusicBeatState
 
 	public static var initialized:Bool = false;
 
+	var bg:FlxSprite;
+
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -137,38 +139,34 @@ class TitleState extends MusicBeatState
 		Conductor.bpm = 102.0;
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite();
-		// bg.loadGraphic(Paths.image('idk_not_yet'));
-		bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		add(bg);
+		bg = new FlxSprite().loadGraphic(Paths.image('title/bg_cityscape'));
+		bg.antialiasing = ClientPrefs.globalAntialiasing;
+		bg.screenCenter();
 
-		logoBl = new FlxSprite();
-		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		
+		logoBl = new FlxSprite().loadGraphic(Paths.image('title/placeholder_logo'));
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
-		logoBl.animation.play('bump');
-		logoBl.updateHitbox();
 		logoBl.screenCenter();
+		logoBl.updateHitbox();
 
 		swagShader = new ColorSwap();
 
+		add(bg);
 		add(logoBl);
 		logoBl.shader = swagShader.shader;
 
-		titleText = new FlxSprite(0, 576);
+		titleText = new FlxSprite(120, 576);
 		#if (desktop && MODS_ALLOWED)
-		var path = "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
+		var path = "mods/" + Paths.currentModDirectory + "/images/title/titleEnter.png";
 		if (!FileSystem.exists(path)){
-			path = "mods/images/titleEnter.png";
+			path = "mods/images/title/titleEnter.png";
 		}
 		if (!FileSystem.exists(path)){
-			path = "assets/images/titleEnter.png";
+			path = "assets/images/title/titleEnter.png";
 		}
 		titleText.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));
 		#else
 		
-		titleText.frames = Paths.getSparrowAtlas('titleEnter');
+		titleText.frames = Paths.getSparrowAtlas('title/titleEnter');
 		#end
 		var animFrames:Array<FlxFrame> = [];
 		@:privateAccess {
@@ -191,7 +189,6 @@ class TitleState extends MusicBeatState
 		titleText.antialiasing = ClientPrefs.globalAntialiasing;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
-		titleText.screenCenter(X);
 		add(titleText);
 
 		credGroup = new FlxGroup();
@@ -238,7 +235,6 @@ class TitleState extends MusicBeatState
 	}
 
 	var transitioning:Bool = false;
-	private static var playJingle:Bool = false;
 
 	var newTitle:Bool = false;
 	var titleTimer:Float = 0;
@@ -351,6 +347,8 @@ class TitleState extends MusicBeatState
 				credGroup.add(money);
 				textGroup.add(money);
 			}
+			money.y -= 350;
+			FlxTween.tween(money, {y: money.y + 350}, 0.5, {ease: FlxEase.expoOut, startDelay: 0.0});
 		}
 	}
 
@@ -362,6 +360,8 @@ class TitleState extends MusicBeatState
 			coolText.y += (textGroup.length * 60) + 200 + offset;
 			credGroup.add(coolText);
 			textGroup.add(coolText);
+			coolText.y += 750;
+			FlxTween.tween(coolText, {y: coolText.y - 750}, 0.5, {ease: FlxEase.expoOut, startDelay: 0.0});
 		}
 	}
 
@@ -435,6 +435,17 @@ class TitleState extends MusicBeatState
 			remove(isMe);
 			remove(credGroup);
 			FlxG.camera.flash(FlxColor.WHITE, 4);
+
+			logoBl.angle = -4;
+
+			new FlxTimer().start(0.01, function(tmr:FlxTimer)
+			{
+				if (logoBl.angle == -4)
+					FlxTween.angle(logoBl, logoBl.angle, 4, 4, {ease: FlxEase.quartInOut});
+				if (logoBl.angle == 4)
+					FlxTween.angle(logoBl, logoBl.angle, -4, 4, {ease: FlxEase.quartInOut});
+			}, 0);
+
 			skippedIntro = true;
 		}
 	}
