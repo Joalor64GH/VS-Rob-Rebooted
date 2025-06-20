@@ -75,11 +75,11 @@ class CoolUtil
 	inline public static function numberArray(max:Int, ?min = 0):Array<Int>
 		return [for (i in min...max) i];
 
-	public static function precacheSound(sound:String, ?library:String = null):Void {
+	public static function precacheSound(sound:String):Void {
 		Paths.sound(sound);
 	}
 
-	public static function precacheMusic(sound:String, ?library:String = null):Void {
+	public static function precacheMusic(sound:String):Void {
 		Paths.music(sound);
 	}
 

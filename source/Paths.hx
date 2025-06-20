@@ -107,7 +107,7 @@ class Paths
 
 	static public var currentModDirectory:String = '';
 
-	public static function getPath(file:String, ?type:AssetType)
+	public static function getPath(file:String)
 	{
 		return getPreloadPath(file);
 	}
@@ -119,32 +119,32 @@ class Paths
 
 	inline static public function txt(key:String)
 	{
-		return getPath('data/$key.txt', TEXT);
+		return getPath('data/$key.txt');
 	}
 
 	inline static public function xml(key:String)
 	{
-		return getPath('data/$key.xml', TEXT);
+		return getPath('data/$key.xml');
 	}
 
 	inline static public function json(key:String)
 	{
-		return getPath('data/$key.json', TEXT);
+		return getPath('data/$key.json');
 	}
 
 	inline static public function shaderFragment(key:String)
 	{
-		return getPath('shaders/$key.frag', TEXT);
+		return getPath('shaders/$key.frag');
 	}
 
 	inline static public function shaderVertex(key:String)
 	{
-		return getPath('shaders/$key.vert', TEXT);
+		return getPath('shaders/$key.vert');
 	}
 
 	inline static public function lua(key:String)
 	{
-		return getPath('$key.lua', TEXT);
+		return getPath('$key.lua');
 	}
 
 	inline static public function script(key:String) {
@@ -234,7 +234,7 @@ class Paths
 			return File.getContent(getPreloadPath(key));
 		#end
 		
-		return Assets.getText(getPath(key, TEXT));
+		return Assets.getText(getPath(key));
 	}
 
 	inline static public function font(key:String)
@@ -245,14 +245,14 @@ class Paths
 		return getPath('fonts/$key');
 	}
 
-	inline static public function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false)
+	inline static public function fileExists(key:String, ?ignoreMods:Bool = false)
 	{
 		#if MODS_ALLOWED
 		if (FileSystem.exists(mods(currentModDirectory + '/' + key)) || FileSystem.exists(mods(key)))
 			return true;
 		#end
 		
-		return Paths.exists(getPath(key, type));
+		return Paths.exists(getPath(key));
 	}
 
 	inline static public function getSparrowAtlas(key:String):FlxAtlasFrames
@@ -314,8 +314,8 @@ class Paths
 		}
 		#end
 
-		var path = getPath('images/$key.png', IMAGE);
-		if (Assets.exists(path, IMAGE))
+		var path = getPath('images/$key.png');
+		if (Assets.exists(path))
 		{
 			if (!currentTrackedAssets.exists(path))
 			{
@@ -340,7 +340,7 @@ class Paths
 			return file;
 		
 		#end
-		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND);
+		var gottenPath:String = getPath('$path/$key.$SOUND_EXT');
 		return gottenPath;
 	}
 
@@ -358,7 +358,7 @@ class Paths
 		}
 		#end
 		// I hate this so god damn much
-		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND);
+		var gottenPath:String = getPath('$path/$key.$SOUND_EXT');
 		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
 		if (!currentTrackedSounds.exists(gottenPath))
 			#if MODS_ALLOWED
@@ -366,7 +366,7 @@ class Paths
 			#else
 				currentTrackedSounds.set(
 					gottenPath, 
-					Assets.getSound((path == 'songs' ? folder = 'songs:' : '') + getPath('$path/$key.$SOUND_EXT', SOUND))
+					Assets.getSound((path == 'songs' ? folder = 'songs:' : '') + getPath('$path/$key.$SOUND_EXT'))
 				);
 			#end
 		localTrackedAssets.push(gottenPath);
