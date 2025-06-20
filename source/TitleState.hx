@@ -161,13 +161,14 @@ class TitleState extends MusicBeatState
 		}
 		add(bg);
 
-		logoBl = new FlxSprite(titleJSON.titlex, titleJSON.titley);
+		logoBl = new FlxSprite();
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
+		logoBl.screenCenter();
 
 		swagShader = new ColorSwap();
 
@@ -223,7 +224,7 @@ class TitleState extends MusicBeatState
 
 		credTextShit.visible = false;
 
-		isMe = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('joalor64Icon'));
+		isMe = new FlxSprite(0, FlxG.height * 0.50).loadGraphic(Paths.image('joalor64Icon'));
 		add(isMe);
 		isMe.visible = false;
 		isMe.scale.set(0.4, 0.4);

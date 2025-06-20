@@ -115,7 +115,7 @@ class Song
 		}
 
 		var songJson:SwagSong = parseJSONshit(rawJson);
-		if(jsonInput != 'events') StageData.loadDirectory(songJson);
+		if(jsonInput != 'events/$formattedSong') StageData.loadDirectory(songJson);
 		onLoadJson(songJson);
 		return songJson;
 	}

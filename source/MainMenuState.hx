@@ -183,7 +183,7 @@ class MainMenuState extends MusicBeatState
 	{
 		curSelected = FlxMath.wrap(curSelected + huh, 0, optionShit.length - 1);
 		menuItems.forEach(function(txt:FlxText) {
-			txt.color = (txt.ID == curSelected) ? FlxColor.BLUE : FlxColor.WHITE;
+			txt.color = (txt.ID == curSelected) ? FlxColor.CYAN : FlxColor.WHITE;
 		});
 	}
 }
