@@ -89,7 +89,7 @@ class WeekData {
 		#if MODS_ALLOWED
 		var disabledMods:Array<String> = [];
 		var modsListPath:String = 'modsList.txt';
-		var directories:Array<String> = [Paths.mods(), Paths.getPreloadPath()];
+		var directories:Array<String> = [Paths.mods(), Paths.getPath()];
 		var originalLength:Int = directories.length;
 		if(FileSystem.exists(modsListPath))
 		{
@@ -125,11 +125,11 @@ class WeekData {
 			}
 		}
 		#else
-		var directories:Array<String> = [Paths.getPreloadPath()];
+		var directories:Array<String> = [Paths.getPath()];
 		var originalLength:Int = directories.length;
 		#end
 
-		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getPreloadPath('weeks/weekList.txt'));
+		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getPath('weeks/weekList.txt'));
 		for (i in 0...sexList.length) {
 			for (j in 0...directories.length) {
 				var fileToCheck:String = directories[j] + 'weeks/' + sexList[i] + '.json';

@@ -207,7 +207,7 @@ class FunkinLua {
 				cervix = Paths.modFolders(cervix);
 				doPush = true;
 			} else {
-				cervix = Paths.getPreloadPath(cervix);
+				cervix = Paths.getPath(cervix);
 				if(FileSystem.exists(cervix)) {
 					doPush = true;
 				}
@@ -238,7 +238,7 @@ class FunkinLua {
 				cervix = Paths.modFolders(cervix);
 				doPush = true;
 			} else {
-				cervix = Paths.getPreloadPath(cervix);
+				cervix = Paths.getPath(cervix);
 				if(FileSystem.exists(cervix)) {
 					doPush = true;
 				}
