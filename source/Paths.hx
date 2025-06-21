@@ -225,8 +225,8 @@ class Paths
 			return File.getContent(modFolders(key));
 		#end
 
-		if (FileSystem.exists(getPreloadPath(key)))
-			return File.getContent(getPreloadPath(key));
+		if (FileSystem.exists(getPath(key)))
+			return File.getContent(getPath(key));
 		#end
 		
 		return Assets.getText(getPath(key));
