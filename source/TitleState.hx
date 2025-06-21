@@ -123,8 +123,7 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-	var logoBl:FlxSprite;
-	var danceLeft:Bool = false;
+	var logo:FlxSprite;
 	var titleText:FlxSprite;
 	var swagShader:ColorSwap = null;
 
@@ -148,25 +147,24 @@ class TitleState extends MusicBeatState
 		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
 		bgCity.screenCenter();
 
-		logoBl = new FlxSprite().loadGraphic(Paths.image('title/placeholder_logo'));
-		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
-		logoBl.scale.set(0.8, 0.8);
-		logoBl.screenCenter();
-		logoBl.updateHitbox();
+		logo = new FlxSprite().loadGraphic(Paths.image('title/logoBase')); // still a placeholder
+		logo.antialiasing = ClientPrefs.globalAntialiasing;
+		logo.screenCenter();
+		logo.updateHitbox();
 
 		swagShader = new ColorSwap();
 
 		add(bg);
 		add(bgCity);
-		add(logoBl);
+		add(logo);
 
 		if (swagShader != null) {
 			bg.shader = swagShader.shader;
 			bgCity.shader = swagShader.shader;
-			logoBl.shader = swagShader.shader;
+			logo.shader = swagShader.shader;
 		}
 
-		titleText = new FlxSprite(120, 576);
+		titleText = new FlxSprite(130, 576);
 		#if (desktop && MODS_ALLOWED)
 		var path = "mods/" + Paths.currentModDirectory + "/images/title/titleEnter.png";
 		if (!FileSystem.exists(path)){
@@ -262,7 +260,7 @@ class TitleState extends MusicBeatState
 				FlxG.sound.music.fadeOut(0.3);
 			FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function()
 			{
-				#if (sys || desktop)
+				#if sys
 				Sys.exit(0);
 				#else
 				System.exit(0);
@@ -448,14 +446,14 @@ class TitleState extends MusicBeatState
 			remove(credGroup);
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 
-			logoBl.angle = -4;
+			logo.angle = -4;
 
 			new FlxTimer().start(0.01, function(tmr:FlxTimer)
 			{
-				if (logoBl.angle == -4)
-					FlxTween.angle(logoBl, logoBl.angle, 4, 4, {ease: FlxEase.quartInOut});
-				if (logoBl.angle == 4)
-					FlxTween.angle(logoBl, logoBl.angle, -4, 4, {ease: FlxEase.quartInOut});
+				if (logo.angle == -4)
+					FlxTween.angle(logo, logo.angle, 4, 4, {ease: FlxEase.quartInOut});
+				if (logo.angle == 4)
+					FlxTween.angle(logo, logo.angle, -4, 4, {ease: FlxEase.quartInOut});
 			}, 0);
 
 			skippedIntro = true;

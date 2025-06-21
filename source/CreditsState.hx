@@ -6,12 +6,66 @@ class CreditsState extends MusicBeatState
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var iconArray:Array<AttachedSprite> = [];
-	private var creditsStuff:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+	private var creditsStuff:Array<Array<String>> = [];
+
+	var bg:FlxSprite;
+	var descText:FlxText;
+	var intendedColor:FlxColor;
+	var colorTween:FlxTween;
+	var descBox:AttachedSprite;
+
+	var offsetThing:Float = -75;
+
+	override function create()
+	{
+		#if desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Menus", null);
+		#end
+
+		persistentUpdate = true;
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		add(bg);
+		bg.screenCenter();
+		
+		grpOptions = new FlxTypedGroup<Alphabet>();
+		add(grpOptions);
+
+		#if MODS_ALLOWED
+		var path:String = 'modsList.txt';
+		if(FileSystem.exists(path))
+		{
+			var leMods:Array<String> = CoolUtil.coolTextFile(path);
+			for (i in 0...leMods.length)
+			{
+				if(leMods.length > 1 && leMods[0].length > 0) {
+					var modSplit:Array<String> = leMods[i].split('|');
+					if(!Paths.ignoreModFolders.contains(modSplit[0].toLowerCase()) && !modsAdded.contains(modSplit[0]))
+					{
+						if(modSplit[1] == '1')
+							pushModCreditsToList(modSplit[0]);
+						else
+							modsAdded.push(modSplit[0]);
+					}
+				}
+			}
+		}
+
+		var arrayOfFolders:Array<String> = Paths.getModDirectories();
+		arrayOfFolders.push('');
+		for (folder in arrayOfFolders)
+		{
+			pushModCreditsToList(folder);
+		}
+		#end
+
+		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['VS Rob'],
 			['Joalor64', 'joalor64', 'Mod Director/Creator, Artist, Programmer, Composer\nBasically Everything', 'https://joalor64gh.github.io/', '00d2e6'],
 			[''],
-			['Thanks to'],
+			['Shoutouts'],
 			['NyxTheShield', 'nyx', 'Boyfriend Soundfont Samples', 'https://github.com/NyxTheShield', '8AE8FF'],
+			['Lizzy Strawberry', 'strawberry', 'Shader Support for Psych 0.5.2h', 'https://gamebanana.com/members/1777575', 'F760EB'], // icon by jokinn
 			[''],
 			['Psych Engine Team'],
 			['ShadowMario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '444444'],
@@ -37,28 +91,8 @@ class CreditsState extends MusicBeatState
 			['Thank you for playing!']
 		];
 
-	var bg:FlxSprite;
-	var descText:FlxText;
-	var intendedColor:FlxColor;
-	var colorTween:FlxTween;
-	var descBox:AttachedSprite;
-
-	var offsetThing:Float = -75;
-
-	override function create()
-	{
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
-
-		persistentUpdate = true;
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		add(bg);
-		bg.screenCenter();
-		
-		grpOptions = new FlxTypedGroup<Alphabet>();
-		add(grpOptions);
+		for (i in pisspoop)
+			creditsStuff.push(i);
 	
 		for (i in 0...creditsStuff.length)
 		{
@@ -69,11 +103,16 @@ class CreditsState extends MusicBeatState
 			grpOptions.add(optionText);
 
 			if(isSelectable) {
+				if(creditsStuff[i][5] != null)
+					Paths.currentModDirectory = creditsStuff[i][5];
+
 				var icon:AttachedSprite = new AttachedSprite('credits/' + creditsStuff[i][1]);
 				icon.xAdd = optionText.width + 10;
 				icon.sprTracker = optionText;
 				iconArray.push(icon);
 				add(icon);
+
+				Paths.currentModDirectory = '';
 
 				if(curSelected == -1) curSelected = i;
 			}
@@ -209,6 +248,31 @@ class CreditsState extends MusicBeatState
 		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
 		descBox.updateHitbox();
 	}
+
+	#if MODS_ALLOWED
+	private var modsAdded:Array<String> = [];
+	function pushModCreditsToList(folder:String)
+	{
+		if(modsAdded.contains(folder)) return;
+
+		var creditsFile:String = null;
+		if(folder != null && folder.trim().length > 0) creditsFile = Paths.mods(folder + '/data/credits.txt');
+		else creditsFile = Paths.mods('data/credits.txt');
+
+		if (FileSystem.exists(creditsFile))
+		{
+			var firstarray:Array<String> = File.getContent(creditsFile).split('\n');
+			for(i in firstarray)
+			{
+				var arr:Array<String> = i.replace('\\n', '\n').split("::");
+				if(arr.length >= 5) arr.push(folder);
+				creditsStuff.push(arr);
+			}
+			creditsStuff.push(['']);
+		}
+		modsAdded.push(folder);
+	}
+	#end
 
 	private function unselectableCheck(num:Int):Bool {
 		return creditsStuff[num].length <= 1;
