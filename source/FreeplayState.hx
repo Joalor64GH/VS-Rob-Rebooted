@@ -5,11 +5,9 @@ class FreeplayState extends MusicBeatState
     	private var grpControls:FlxTypedGroup<Alphabet>;
         private var grpIcons:FlxTypedGroup<HealthIcon>;
 
-	public var controlStrings:Array<Array<String>> = [
-		['Tutorial'],
-		['Tutorial', 'How to funk!', 'gf'],
-		['VS Rob (Demo)'],
-		['Hello Friend', 'When robots...sing?', 'rob']
+	public var controlStrings:Array<CoolSong> = [
+		new CoolSong('Tutorial', 'How to funk!', 'gf'),
+		new CoolSong('Hello Friend', 'When robots...sing?', 'rob')
 	];
 	
 	var lerpScore:Int = 0;
@@ -21,6 +19,7 @@ class FreeplayState extends MusicBeatState
 	var descTxt:FlxText;
 
 	var bottomPanel:FlxSprite;
+
 	var menuBG:FlxSprite;
 
     	var curSelected:Int = 0;
@@ -50,20 +49,17 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...controlStrings.length)
 		{
-			var isSelectable:Bool = unselectableCheck(i);
-			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlStrings[i][0], true, false);
+			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlStrings[i].name, true, false);
 			controlLabel.isMenuItem = true;
 			controlLabel.targetY = i - curSelected;
 			grpControls.add(controlLabel);
 
-			if (isSelectable) {
-            		var icon:HealthIcon = new HealthIcon(controlStrings[i][2]);
+            		var icon:HealthIcon = new HealthIcon(controlStrings[i].icon);
 			icon.sprTracker = controlLabel;
 			icon.updateHitbox();
 			add(icon);
 			icon.ID = i;
 			grpIcons.add(icon);
-			}
 		}
         
         	bottomPanel = new FlxSprite(0, FlxG.height - 100).makeGraphic(FlxG.width, 100, 0xFF000000);
@@ -143,7 +139,7 @@ class FreeplayState extends MusicBeatState
 		{
             		FlxG.sound.music.volume = 0;
             		FlxG.sound.play(Paths.sound('confirmMenu'));
-			var lowercasePlz:String = Paths.formatToSongPath(controlStrings[curSelected][0]);
+			var lowercasePlz:String = Paths.formatToSongPath(controlStrings[curSelected].name);
 			var formatIdfk:String = Highscore.formatSong(lowercasePlz);
 			try 
 			{
@@ -158,7 +154,7 @@ class FreeplayState extends MusicBeatState
 					var errorStr:String = e.toString();
 					if (errorStr.startsWith('[lime.utils.Assets] ERROR:')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(lowercasePlz), errorStr.length - 1);
 					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-					missingText.screenCenter();
+					missingText.screenCenter(Y);
 					missingText.visible = true;
 					missingTextBG.visible = true;
 					FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -176,7 +172,7 @@ class FreeplayState extends MusicBeatState
 		else if (controls.RESET)
 		{
 			persistentUpdate = false;
-			openSubState(new ResetScoreSubState(controlStrings[curSelected][0], controlStrings[curSelected][1]));
+			openSubState(new ResetScoreSubState(controlStrings[curSelected].name, controlStrings[curSelected].icon));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 	}
@@ -187,19 +183,17 @@ class FreeplayState extends MusicBeatState
 
 		curSelected += change;
 
-		do {
-			if (curSelected < 0)
-				curSelected = grpControls.length - 1;
-			if (curSelected >= grpControls.length)
-				curSelected = 0;
-		} while (unselectableCheck(curSelected));
+		if (curSelected < 0)
+			curSelected = grpControls.length - 1;
+		if (curSelected >= grpControls.length)
+			curSelected = 0;
 
-		descTxt.text = controlStrings[curSelected].length > 2 ? controlStrings[curSelected][2] : '';
+		descTxt.text = controlStrings[curSelected].desc;
 
 		var bullShit:Int = 0;
 
-        	intendedScore = Highscore.getScore(controlStrings[curSelected][0]);
-		intendedRating = Highscore.getRating(controlStrings[curSelected][0]);
+        	intendedScore = Highscore.getScore(controlStrings[curSelected].name);
+		intendedRating = Highscore.getRating(controlStrings[curSelected].name);
 
 		for (i in grpIcons.members) i.alpha = (i.ID == curSelected ? 1 : 0.6);
 
@@ -208,16 +202,24 @@ class FreeplayState extends MusicBeatState
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 
-			if (!unselectableCheck(bullShit - 1)) {
-				item.alpha = 0.6;
-				if (item.targetY == 0) {
-					item.alpha = 1;
-				}
-			}
+			item.alpha = 0.6;
+
+			if (item.targetY == 0)
+				item.alpha = 1;
 		}
 	}
+}
 
-	private function unselectableCheck(num:Int):Bool {
-		return controlStrings[num].length <= 1;
+class CoolSong
+{
+	public var name:String = '';
+	public var desc:String = '';
+	public var icon:String = '';
+
+	public function new(name:String, desc:String, icon:String)
+	{
+		this.name = name;
+        	this.desc = desc;
+        	this.icon = icon;
 	}
 }
