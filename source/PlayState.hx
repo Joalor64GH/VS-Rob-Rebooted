@@ -283,6 +283,13 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		PauseSubState.fromPlayState = false;
+
+		#if cpp
+		cpp.vm.Gc.enable(true);
+		#end
+		System.gc();
+
 		Paths.clearStoredMemory();
 
 		// for lua
@@ -807,10 +814,6 @@ class PlayState extends MusicBeatState
 		doof.cameras = [camHUD];
 		versionTxt.cameras = [camHUD];
 		healthTxt.cameras = [camHUD];
-
-		// if (SONG.song == 'South')
-		// FlxG.camera.alpha = 0.7;
-		// UI_camera.zoom = 1;
 
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
@@ -2019,7 +2022,6 @@ class PlayState extends MusicBeatState
 				persistentDraw = true;
 				paused = true;
 
-				// 1 / 1000 chance for Gitaroo Man easter egg
 				if(FlxG.sound.music != null) {
 					FlxG.sound.music.pause();
 					vocals.pause();
@@ -2704,6 +2706,8 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong():Void
 	{
+		System.gc();
+		
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;

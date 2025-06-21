@@ -77,7 +77,7 @@ class CreditsState extends MusicBeatState
 			['Engine Contributors'],
 			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i', '9E29CF'],
 			['gedehari', 'sqirra', 'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari', 'E1843A'],
-			['MAJigsaw77', 'majigsaw', 'Creator of hxvlc, Base HScript Code', 'https://x.com/MAJigsaw77', '5F5F5F'],
+			['MAJigsaw77', 'majigsaw', 'Creator of hxvlc\nBase HScript Code', 'https://x.com/MAJigsaw77', '5F5F5F'],
 			['KadeDev', 'kade', 'Fixed Chart Editor and other PRs', 'https://twitter.com/kade0912', '64A250'],
 			['Keoiki', 'keoiki', 'Note Splash Animations', 'https://twitter.com/Keoiki_', 'D2D2D2'],
 			["superpowers04", "superpowers04",	"LUA JIT Fork", "https://x.com/superpowers04", "B957ED"],
