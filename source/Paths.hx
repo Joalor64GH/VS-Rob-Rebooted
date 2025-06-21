@@ -109,11 +109,6 @@ class Paths
 
 	public static function getPath(file:String)
 	{
-		return getPreloadPath(file);
-	}
-
-	inline public static function getPreloadPath(file:String = '')
-	{
 		return 'assets/$file';
 	}
 
