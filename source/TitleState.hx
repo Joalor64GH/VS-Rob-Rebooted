@@ -150,8 +150,8 @@ class TitleState extends MusicBeatState
 
 		logoBl = new FlxSprite().loadGraphic(Paths.image('title/placeholder_logo'));
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
+		logoBl.scale.set(0.8, 0.8);
 		logoBl.screenCenter();
-		logoBl.scale.set(0.6, 0.6);
 		logoBl.updateHitbox();
 
 		swagShader = new ColorSwap();
@@ -159,7 +159,12 @@ class TitleState extends MusicBeatState
 		add(bg);
 		add(bgCity);
 		add(logoBl);
-		logoBl.shader = swagShader.shader;
+
+		if (swagShader != null) {
+			bg.shader = swagShader.shader;
+			bgCity.shader = swagShader.shader;
+			logoBl.shader = swagShader.shader;
+		}
 
 		titleText = new FlxSprite(120, 576);
 		#if (desktop && MODS_ALLOWED)
@@ -400,7 +405,7 @@ class TitleState extends MusicBeatState
 					createCoolText(['Psych Engine by']);
 				case 4:
 					addMoreText('ShadowMario');
-					addMoreText('Riverenn');
+					addMoreText('Riveren');
 				case 5:
 					deleteCoolText();
 				case 6:
@@ -408,6 +413,9 @@ class TitleState extends MusicBeatState
 				case 8:
 					addMoreText('Yours Truly');
 					isMe.visible = true;
+					isMe.scale.set(0.45, 0.45);
+					FlxTween.cancelTweensOf(isMe.scale);
+					FlxTween.tween(isMe.scale, {x: 0.35, y: 0.35}, 0.3, {ease: FlxEase.quadOut});
 				case 9:
 					deleteCoolText();
 					isMe.visible = false;

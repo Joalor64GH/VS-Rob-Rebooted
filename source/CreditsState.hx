@@ -65,14 +65,7 @@ class CreditsState extends MusicBeatState
 			var isSelectable:Bool = !unselectableCheck(i);
 			var optionText:Alphabet = new Alphabet(0, 70 * i, creditsStuff[i][0], !isSelectable, false);
 			optionText.isMenuItem = true;
-			optionText.screenCenter(X);
-			optionText.yAdd -= 70;
-			if(isSelectable) {
-				optionText.x -= 70;
-			}
-			optionText.forceX = optionText.x;
-			//optionText.yMult = 90;
-			optionText.targetY = i;
+			optionText.targetY = i - curSelected;
 			grpOptions.add(optionText);
 
 			if(isSelectable) {
@@ -97,7 +90,6 @@ class CreditsState extends MusicBeatState
 		descText = new FlxText(50, FlxG.height + offsetThing - 25, 1180, "", 32);
 		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
 		descText.scrollFactor.set();
-		//descText.borderSize = 2.4;
 		descBox.sprTracker = descText;
 		add(descText);
 
@@ -164,25 +156,6 @@ class CreditsState extends MusicBeatState
 			}
 		}
 		
-		for (item in grpOptions.members)
-		{
-			if(!item.isBold)
-			{
-				var lerpVal:Float = CoolUtil.boundTo(elapsed * 12, 0, 1);
-				if(item.targetY == 0)
-				{
-					var lastX:Float = item.x;
-					item.screenCenter(X);
-					item.x = FlxMath.lerp(lastX, item.x - 70, lerpVal);
-					item.forceX = item.x;
-				}
-				else
-				{
-					item.x = FlxMath.lerp(item.x, 200 + -40 * Math.abs(item.targetY), lerpVal);
-					item.forceX = item.x;
-				}
-			}
-		}
 		super.update(elapsed);
 	}
 
