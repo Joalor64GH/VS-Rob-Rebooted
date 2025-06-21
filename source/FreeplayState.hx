@@ -194,7 +194,7 @@ class FreeplayState extends MusicBeatState
 				curSelected = grpControls.length - 1;
 			if (curSelected >= grpControls.length)
 				curSelected = 0;
-		} while (unselectableCheck(curSelected))
+		} while (unselectableCheck(curSelected));
 
 		descTxt.text = controlStrings[curSelected][2];
 
