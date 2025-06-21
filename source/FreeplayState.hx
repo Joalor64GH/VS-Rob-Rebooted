@@ -56,15 +56,13 @@ class FreeplayState extends MusicBeatState
 			controlLabel.targetY = i - curSelected;
 			grpControls.add(controlLabel);
 
-			if (!isSelectable) {
+			if (isSelectable) {
             		var icon:HealthIcon = new HealthIcon(controlStrings[i][2]);
 			icon.sprTracker = controlLabel;
 			icon.updateHitbox();
 			add(icon);
 			icon.ID = i;
 			grpIcons.add(icon);
-
-			if(curSelected == -1) curSelected = i;
 			}
 		}
         
@@ -149,9 +147,9 @@ class FreeplayState extends MusicBeatState
 			var formatIdfk:String = Highscore.formatSong(lowercasePlz);
 			try 
 			{
-				LoadingState.loadAndSwitchState(new PlayState());
 				PlayState.SONG = Song.loadFromJson(formatIdfk);
 				PlayState.isStoryMode = false;
+				LoadingState.loadAndSwitchState(new PlayState());
 			} 
 			catch(e:Dynamic)
 				{
@@ -160,7 +158,7 @@ class FreeplayState extends MusicBeatState
 					var errorStr:String = e.toString();
 					if (errorStr.startsWith('[lime.utils.Assets] ERROR:')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(lowercasePlz), errorStr.length - 1);
 					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-					missingText.screenCenter(Y);
+					missingText.screenCenter();
 					missingText.visible = true;
 					missingTextBG.visible = true;
 					FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -196,7 +194,7 @@ class FreeplayState extends MusicBeatState
 				curSelected = 0;
 		} while (unselectableCheck(curSelected));
 
-		descTxt.text = controlStrings[curSelected][2];
+		descTxt.text = controlStrings[curSelected].length > 2 ? controlStrings[curSelected][2] : '';
 
 		var bullShit:Int = 0;
 
