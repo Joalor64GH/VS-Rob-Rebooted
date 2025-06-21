@@ -107,7 +107,7 @@ class Paths
 
 	static public var currentModDirectory:String = '';
 
-	public static function getPath(file:String)
+	public static function getPath(file:String = '')
 	{
 		return 'assets/$file';
 	}
