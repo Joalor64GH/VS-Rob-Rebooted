@@ -355,9 +355,10 @@ class TitleState extends MusicBeatState
 
 		super.update(elapsed);
 
-		for (star in stars) {
-			if (FlxG.random.bool(1)) {
-				FlxTween.tween(star, {alpha: FlxG.random.float(0.3, 1)}, 0.5);
+		if (FlxG.random.bool(2)) {
+			var star = FlxG.random.getObject(stars.members);
+			if (star != null) {
+			F	lxTween.tween(star, {alpha: FlxG.random.float(0.3, 1)}, 0.5);
 			}
 		}
 	}
