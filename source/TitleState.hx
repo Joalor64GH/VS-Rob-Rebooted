@@ -145,13 +145,6 @@ class TitleState extends MusicBeatState
 		bg.screenCenter();
 
 		stars = new FlxTypedGroup<FlxSprite>();
-		for (i in 0...100) {
-			var star:FlxSprite = new FlxSprite(FlxG.random.float(0, FlxG.width), FlxG.random.float(0, FlxG.height));
-			star.makeGraphic(2, 2, FlxColor.WHITE);
-			star.alpha = FlxG.random.float(0.3, 1);
-			stars.add(star);
-		}
-		add(stars);
 
 		bgCity = new FlxSprite().loadGraphic(Paths.image('title/title_city'));
 		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
@@ -165,6 +158,13 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 
 		add(bg);
+		add(stars);
+		for (i in 0...100) {
+			var star:FlxSprite = new FlxSprite(FlxG.random.float(0, FlxG.width), FlxG.random.float(0, FlxG.height));
+			star.makeGraphic(2, 2, FlxColor.WHITE);
+			star.alpha = FlxG.random.float(0.3, 1);
+			stars.add(star);
+		}
 		add(bgCity);
 		add(logo);
 
