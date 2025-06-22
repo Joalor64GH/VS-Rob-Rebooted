@@ -160,9 +160,7 @@ class TitleState extends MusicBeatState
 		add(bg);
 		add(stars);
 		for (i in 0...100) {
-			var star:FlxSprite = new FlxSprite(FlxG.random.float(0, FlxG.width), FlxG.random.float(0, FlxG.height));
-			star.makeGraphic(2, 2, FlxColor.WHITE);
-			star.alpha = FlxG.random.float(0.3, 1);
+			var star = new FlickeringStar(FlxG.random.float(0, FlxG.width), FlxG.random.float(0, FlxG.height));
 			stars.add(star);
 		}
 		add(bgCity);
@@ -354,13 +352,6 @@ class TitleState extends MusicBeatState
 		}
 
 		super.update(elapsed);
-
-		if (FlxG.random.bool(2)) {
-			var star = FlxG.random.getObject(stars.members);
-			if (star != null) {
-				FlxTween.tween(star, {alpha: FlxG.random.float(0.3, 1)}, 0.5);
-			}
-		}
 	}
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
@@ -475,5 +466,26 @@ class TitleState extends MusicBeatState
 
 			skippedIntro = true;
 		}
+	}
+}
+
+class FlickeringStar extends FlxSprite {
+	public function new(x:Float, y:Float) {
+		super(x, y);
+		var size:Float = FlxG.random.float(1, 3);
+		makeGraphic(size, size, FlxColor.WHITE);
+		alpha = FlxG.random.float(0.3, 1);
+		startFlicker();
+	}
+
+	private function startFlicker():Void {
+		new FlxTimer().start(FlxG.random.float(0.5, 2), function(_) {
+			var newAlpha:Float = FlxG.random.float(0.3, 1);
+			FlxTween.tween(this, {alpha: newAlpha}, 0.5, {
+				onComplete: function(_) {
+					startFlicker();
+				}
+			});
+		});
 	}
 }
