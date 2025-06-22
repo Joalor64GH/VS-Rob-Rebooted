@@ -8,6 +8,8 @@ class FreeplayState extends MusicBeatState
 	public var controlStrings:Array<CoolSong> = [
 		new CoolSong('Tutorial', 'How to funk!', 'gf'),
 		new CoolSong('Hello Friend', 'When robots...sing?', 'rob')
+		// new CoolSong('Metrodrift', 'When robots...sing?', 'rob')
+		// new CoolSong('Interlinked', 'When robots...sing?', 'rob')
 	];
 	
 	var lerpScore:Int = 0;
