@@ -472,7 +472,7 @@ class TitleState extends MusicBeatState
 class FlickeringStar extends FlxSprite {
 	public function new(x:Float, y:Float) {
 		super(x, y);
-		var size:Float = FlxG.random.float(1, 3);
+		var size:Int = FlxG.random.int(1, 3);
 		makeGraphic(size, size, FlxColor.WHITE);
 		alpha = FlxG.random.float(0.3, 1);
 		startFlicker();
