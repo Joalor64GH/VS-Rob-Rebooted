@@ -99,6 +99,7 @@ class ControlsSubState extends MusicBeatSubstate {
 			}
 			optionText.yMult = 60;
 			optionText.targetY = i;
+			optionText.disableX = true;
 			grpOptions.add(optionText);
 
 			if(!isCentered) {

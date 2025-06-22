@@ -1,12 +1,12 @@
 {
 	"songs": [
-		["Hello Friend", "rob", [0, 0, 0]]
+		["Hello Friend", "rob", [41, 128, 185]]
 	],
 
 	"weekCharacters": ["", "", ""],
 	"weekBackground": "city",
 
-	"storyName": "Rob the Robot",
+	"storyName": "Welcome to Skytopia!",
 	"weekBefore": "tutorial",
 	"weekName": "Week 1",
 	"startUnlocked": true,

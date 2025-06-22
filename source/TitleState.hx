@@ -39,6 +39,7 @@ class TitleState extends MusicBeatState
 
 	var bg:FlxSprite;
 	var bgCity:FlxSprite;
+	var stars:FlxTypedGroup<FlxSprite>;
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -142,6 +143,15 @@ class TitleState extends MusicBeatState
 		bg = new FlxSprite().loadGraphic(Paths.image('title/bg_cityscape'));
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		bg.screenCenter();
+
+		stars = new FlxTypedGroup<FlxSprite>();
+		for (i in 0...100) {
+			var star:FlxSprite = new FlxSprite(FlxG.random.float(0, FlxG.width), FlxG.random.float(0, FlxG.height));
+			star.makeGraphic(2, 2, FlxColor.WHITE);
+			star.alpha = FlxG.random.float(0.3, 1);
+			stars.add(star);
+		}
+		add(stars);
 
 		bgCity = new FlxSprite().loadGraphic(Paths.image('title/title_city'));
 		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
@@ -344,6 +354,12 @@ class TitleState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+
+		for (star in stars) {
+			if (FlxG.random.bool(1)) {
+				FlxTween.tween(star, {alpha: FlxG.random.float(0.3, 1)}, 0.5);
+			}
+		}
 	}
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
