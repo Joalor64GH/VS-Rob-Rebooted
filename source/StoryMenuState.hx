@@ -148,7 +148,7 @@ class StoryMenuState extends MusicBeatState
 
 		changeWeek();
 
-		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(1300, 26, 0xFF000000);
 		textBG.alpha = 0.6;
 		add(textBG);
 
@@ -169,13 +169,10 @@ class StoryMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		// scoreText.setFormat('VCR OSD Mono', 32);
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, CoolUtil.boundTo(elapsed * 30, 0, 1)));
 		if(Math.abs(intendedScore - lerpScore) < 10) lerpScore = intendedScore;
 
-		scoreText.text = "WEEK SCORE:" + lerpScore;
-
-		// FlxG.watch.addQuick('font', scoreText.font);
+		scoreText.text = "WEEK SCORE: " + lerpScore;
 
 		if (!movedBack && !selectedWeek)
 		{

@@ -637,7 +637,6 @@ class NotesSubState extends MusicBeatSubstate
 	var scaleTween:FlxTween;
 
 	var blackBG:FlxSprite;
-	var rgbText:Alphabet;
 	var posX = 230;
 	public function new() 
 	{
@@ -683,8 +682,16 @@ class NotesSubState extends MusicBeatSubstate
 			shaderArray.push(newShader);
 		}
 
-		rgbText = new Alphabet(720, 0, "Red Green Blue", false);
-		add(rgbText);
+		var topPanel:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 34, FlxColor.BLACK);
+		topPanel.scrollFactor.set();
+		topPanel.alpha = 0.6;
+		add(topPanel);
+
+		var valsTxt:FlxText = new FlxText(topPanel.x, topPanel.y + 4, FlxG.width, "Value 1: Red // Value 2: Green // Value 3: Blue", 32);
+		valsTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		valsTxt.screenCenter(X);
+		valsTxt.scrollFactor.set();
+		add(valsTxt);
 
 		changeSelection();
 
@@ -712,7 +719,6 @@ class NotesSubState extends MusicBeatSubstate
 			item.y = FlxMath.lerp(item.y, (scaledY * 165) + 270, lerpVal);
 			item.x = FlxMath.lerp(item.x, (item.ID * 20) + 90, lerpVal);
 			if (i == curSelected) {
-				rgbText.y = item.y - 70;
 				blackBG.y = item.y - 20;
 				blackBG.x = item.x - 20;
 				if (lastSelected != curSelected) {
@@ -856,7 +862,6 @@ class NotesSubState extends MusicBeatSubstate
 			if (curSelected == i) {
 				item.alpha = 1;
 				item.scale.set(0.6, 0.6);
-				rgbText.y = item.y - 40;
 				blackBG.y = item.y + 28;
 			}
 			item.ID = bullshit2 - curSelected;

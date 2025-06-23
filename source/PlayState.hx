@@ -220,8 +220,11 @@ class PlayState extends MusicBeatState
 	public var scoreTxt:FlxText;
 	public var versionTxt:FlxText;
 	public var healthTxt:FlxText;
+
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
+
+	var songInfo:FlxSprite;
 
 	// Precision
 	public var precisions:Array<FlxText> = [];
@@ -757,6 +760,13 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
+		songInfo = new AttachedSprite('songBG');
+		songInfo.scrollFactor.set();
+		songInfo.visible = !ClientPrefs.hideHud;
+		songInfo.x -= 500;
+		songInfo.alpha = 0;
+		add(songInfo);
+
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.hideHud;
@@ -804,6 +814,7 @@ class PlayState extends MusicBeatState
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
+		songInfo.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
@@ -3601,6 +3612,23 @@ class PlayState extends MusicBeatState
 		if(curStep == lastStepHit) {
 			return;
 		}
+
+		if (curStep == 1)
+			{
+				songInfo.alpha = 1;
+				FlxTween.tween(songInfo, {x: 0}, 2.6, {ease: FlxEase.expoOut});
+			}
+			
+		if (curStep == 32)
+			{
+				FlxTween.tween(songInfo, {x: -500}, 2.6, {
+					ease: FlxEase.expoIn,
+					onComplete: function(twn:FlxTween)
+					{
+						songInfo.alpha = 0;
+					}
+				});
+			}
 
 		lastStepHit = curStep;
 		callOnScripts('stepHit', [curStep]);
