@@ -845,7 +845,6 @@ class PlayState extends MusicBeatState
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
-		songInfo.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
@@ -1309,7 +1308,7 @@ class PlayState extends MusicBeatState
 			if (!timerStarted) {
 				timerStarted = true;
 				FlxTween.tween(bgThing, {x: -50}, 0.25, {ease: FlxEase.quadOut});
-				new FlxTimer().start(3.7, () -> {
+				new FlxTimer().start(3.7, (tmr:FlxTimer) -> {
 					FlxTween.tween(bgThing, {x: -500}, 0.5, {
 						ease: FlxEase.quadIn,
 						onComplete: (_) -> hideSongBanner()
