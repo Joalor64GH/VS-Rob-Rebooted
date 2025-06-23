@@ -464,7 +464,7 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'stage': //Week 1
+			case 'stage':
 				var bg:BGSprite = new BGSprite('stageback', -600, -200, 0.9, 0.9);
 				add(bg);
 
@@ -488,6 +488,10 @@ class PlayState extends MusicBeatState
 					stageCurtains.updateHitbox();
 					add(stageCurtains);
 				}
+			case 'city': // Skytopia
+				var bg:BGSprite = new BGSprite('cityStage/cityStage', -600, -600);
+				bg.scale.set(1.5, 1.5);
+				add(bg);
 		}
 
 		if(isPixelStage) {
@@ -765,12 +769,9 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
-	var songNoHyphen = PlayState.SONG.song.replace("-", " ");
-	var songDisplay = songNoHyphen.charAt(0).toUpperCase() + songNoHyphen.substr(1);
-
-	// Load credit
+	// Song info
 	var creditText:String = '???';
-	var filePath = Paths.txt('credits/' + PlayState.SONG.song);
+	var filePath = Paths.getPath('credits/' + PlayState.SONG.song + '.txt');
 	if (FileSystem.exists(filePath))
 		creditText = File.getContent(filePath);
 
@@ -787,7 +788,7 @@ class PlayState extends MusicBeatState
 	beforeSongText.cameras = [camHUD];
 	add(beforeSongText);
 
-	songText = new FlxText(bgThing.x + 80, 520, 0, songDisplay, 30);
+	songText = new FlxText(bgThing.x + 80, 520, 0, PlayState.SONG.song, 30);
 	songText.setFormat(Paths.font("vcr.ttf"), 30, 0xFFFFFFFF, LEFT);
 	songText.cameras = [camHUD];
 	add(songText);
@@ -2704,6 +2705,16 @@ class PlayState extends MusicBeatState
 	var cameraTwn:FlxTween;
 	public function moveCamera(isDad:Bool)
 	{
+		if (curStage == 'city') {
+			if (isDad) {
+				camFollow.y -= 50;
+				camFollow.x += 200;
+			} else {
+				camFollow.y -= 200;
+				camFollow.x -= 300;
+			}
+		}
+		
 		if(isDad)
 		{
 			camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
