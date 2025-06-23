@@ -224,7 +224,12 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
-	var songInfo:FlxSprite;
+	var bgThing:FlxSprite;
+	var beforeSongText:FlxText;
+	var songText:FlxText;
+	var whoDuntIt:FlxText;
+	var madeCredit:Bool = false;
+	var timerStarted:Bool = false;
 
 	// Precision
 	public var precisions:Array<FlxText> = [];
@@ -760,12 +765,38 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
-		songInfo = new AttachedSprite('songBG');
-		songInfo.scrollFactor.set();
-		songInfo.visible = !ClientPrefs.hideHud;
-		songInfo.x -= 500;
-		songInfo.alpha = 0;
-		add(songInfo);
+	var songNoHyphen = PlayState.SONG.song.replace("-", " ");
+	var songDisplay = songNoHyphen.charAt(0).toUpperCase() + songNoHyphen.substr(1);
+
+	// Load credit
+	var creditText:String = '???';
+	var filePath = Paths.txt('credits/' + PlayState.SONG.song);
+	if (FileSystem.exists(filePath))
+		creditText = File.getContent(filePath);
+
+	bgThing = new FlxSprite(-550, 470).loadGraphic(Paths.image('songBG'));
+	bgThing.scrollFactor.set();
+	bgThing.alpha = 0.7;
+	bgThing.setGraphicSize(Std.int(bgThing.width * 0.35), Std.int(bgThing.height * 0.45));
+	bgThing.updateHitbox();
+	bgThing.cameras = [camHUD];
+	add(bgThing);
+
+	beforeSongText = new FlxText(bgThing.x + 60, 480, 0, "Now Playing...", 25);
+	beforeSongText.setFormat(Paths.font("vcr.ttf"), 25, 0xFFFFFFFF, LEFT);
+	beforeSongText.cameras = [camHUD];
+	add(beforeSongText);
+
+	songText = new FlxText(bgThing.x + 80, 520, 0, songDisplay, 30);
+	songText.setFormat(Paths.font("vcr.ttf"), 30, 0xFFFFFFFF, LEFT);
+	songText.cameras = [camHUD];
+	add(songText);
+
+	whoDuntIt = new FlxText(bgThing.x + 110, 565, 0, "Composer - " + creditText, 27);
+	whoDuntIt.setFormat(Paths.font("vcr.ttf"), 27, 0xFFFFFFFF, LEFT);
+	whoDuntIt.cameras = [camHUD];
+	add(whoDuntIt);
+	madeCredit = true;
 
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
@@ -1275,6 +1306,17 @@ class PlayState extends MusicBeatState
 			setOnLuas('startedCountdown', true);
 			callOnLuas('onCountdownStarted', []);
 
+			if (!timerStarted) {
+				timerStarted = true;
+				FlxTween.tween(bgThing, {x: -50}, 0.25, {ease: FlxEase.quadOut});
+				new FlxTimer().start(3.7, () -> {
+					FlxTween.tween(bgThing, {x: -500}, 0.5, {
+						ease: FlxEase.quadIn,
+						onComplete: (_) -> hideSongBanner()
+					});
+				});
+			}
+
 			var swagCounter:Int = 0;
 
 			if (skipCountdown || startOnTime > 0) {
@@ -1422,6 +1464,13 @@ class PlayState extends MusicBeatState
 				// generateSong('fresh');
 			}, 5);
 		}
+	}
+
+	function hideSongBanner() {
+		remove(bgThing);
+		remove(beforeSongText);
+		remove(songText);
+		if (madeCredit) remove(whoDuntIt);
 	}
 
 	public function clearNotesBefore(time:Float)
@@ -1954,6 +2003,11 @@ class PlayState extends MusicBeatState
 	{
 		callOnScripts('update', [elapsed]);
 		callOnLuas('onUpdate', [elapsed]);
+
+		beforeSongText.x = bgThing.x + 60;
+		songText.x = bgThing.x + 80;
+		if (madeCredit)
+			whoDuntIt.x = bgThing.x + 110;
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
@@ -3612,23 +3666,6 @@ class PlayState extends MusicBeatState
 		if(curStep == lastStepHit) {
 			return;
 		}
-
-		if (curStep == 1)
-			{
-				songInfo.alpha = 1;
-				FlxTween.tween(songInfo, {x: 0}, 2.6, {ease: FlxEase.expoOut});
-			}
-			
-		if (curStep == 32)
-			{
-				FlxTween.tween(songInfo, {x: -500}, 2.6, {
-					ease: FlxEase.expoIn,
-					onComplete: function(twn:FlxTween)
-					{
-						songInfo.alpha = 0;
-					}
-				});
-			}
 
 		lastStepHit = curStep;
 		callOnScripts('stepHit', [curStep]);
