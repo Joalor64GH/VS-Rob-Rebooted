@@ -489,8 +489,7 @@ class PlayState extends MusicBeatState
 					add(stageCurtains);
 				}
 			case 'city': // Skytopia
-				var bg:FlxSprite = new FlxSprite(-600, -600).loadGraphic(Paths.image('cityStage/cityStage'));
-				bg.scrollFactor.set();
+				var bg:BGSprite = new BGSprite('cityStage/cityStage', -600, -600, 1, 1);
 				bg.scale.set(1.5, 1.5);
 				bg.updateHitbox();
 				add(bg);
@@ -2707,16 +2706,6 @@ class PlayState extends MusicBeatState
 	var cameraTwn:FlxTween;
 	public function moveCamera(isDad:Bool)
 	{
-		if (curStage == 'city') {
-			if (isDad) {
-				camFollow.y -= 50;
-				camFollow.x += 200;
-			} else {
-				camFollow.y -= 200;
-				camFollow.x -= 300;
-			}
-		}
-		
 		if(isDad)
 		{
 			camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
