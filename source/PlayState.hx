@@ -224,6 +224,7 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
+	// Credits to Unholywanderer04
 	var bgThing:FlxSprite;
 	var beforeSongText:FlxText;
 	var songText:FlxText;

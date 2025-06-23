@@ -26,7 +26,7 @@
 
 	<assets path="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets" exclude="*.mp3" unless="web"/>
-	<assets path="assets/videos" library="videos"        if="VIDEOS_ALLOWED"/>
+	<assets path="assets/videos" library="videos" if="VIDEOS_ALLOWED"/>
 	<assets path='mods' embed='false' if="MODS_ALLOWED"/>
 
 	<section if="desktop">

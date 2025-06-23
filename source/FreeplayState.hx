@@ -32,6 +32,9 @@ class FreeplayState extends MusicBeatState
 
     	override function create()
 	{
+		persistentUpdate = true;
+		PlayState.isStoryMode = false;
+
 		menuBG = new FlxSprite().loadGraphic(Paths.image('mainmenu/bg_msn'));
         	menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
@@ -134,12 +137,14 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK) 
         	{
+				persistentUpdate = false;
                 	FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
         	}
             
 		if (controls.ACCEPT)
 		{
+			persistentUpdate = false;
             		FlxG.sound.music.volume = 0;
             		FlxG.sound.play(Paths.sound('confirmMenu'));
 			var lowercasePlz:String = Paths.formatToSongPath(controlStrings[curSelected].name);
