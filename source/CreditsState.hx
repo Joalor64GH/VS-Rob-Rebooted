@@ -72,7 +72,7 @@ class CreditsState extends MusicBeatState
 			['Riveren', 'riveren', 'Main Artist/Animator of Psych Engine', 'https://x.com/riverennn', '14967B'],
 			[''],
 			['Former Engine Members'],
-			['bbpanzu', 'bb', 'Ex-Programmer of Psych Engine', 'https://x.com/bbsub3', '3E813A'],
+			['bbpanzu', 'bb', 'Ex-Programmer of Psych Engine', 'https://x.com/bbpnz213', '3E813A'],
 			[''],
 			['Engine Contributors'],
 			['iFlicky', 'flicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://x.com/flicky_i', '9E29CF'],
