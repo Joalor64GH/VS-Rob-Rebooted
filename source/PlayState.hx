@@ -490,8 +490,9 @@ class PlayState extends MusicBeatState
 				}
 			case 'city': // Skytopia
 				var bg:FlxSprite = new FlxSprite(-600, -600).loadGraphic(Paths.image('cityStage/cityStage'));
-				bg.scrollFactor.set(1, 1);
+				bg.scrollFactor.set();
 				bg.scale.set(1.5, 1.5);
+				bg.updateHitbox();
 				add(bg);
 		}
 
