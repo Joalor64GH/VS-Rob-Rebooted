@@ -1,11 +1,4 @@
 bf
-bf-car
-bf-christmas
-bf-pixel
-bf-pixel-opponent
 dad
 gf
-gf-car
-gf-christmas
-gf-pixel
 rob
