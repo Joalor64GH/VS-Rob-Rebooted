@@ -116,12 +116,10 @@ class TitleState extends MusicBeatState
 		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
 		bgCity.screenCenter();
 
-		logo = new FlxSprite(0, -100).loadGraphic(Paths.image('title/titleLogo'));
+		logo = new FlxSprite().loadGraphic(Paths.image('title/titleLogo'));
 		logo.antialiasing = ClientPrefs.globalAntialiasing;
 		logo.screenCenter(X);
 		logo.updateHitbox();
-
-		
 
 		add(bg);
 		add(stars);
