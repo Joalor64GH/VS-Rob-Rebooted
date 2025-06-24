@@ -509,7 +509,6 @@ class PlayState extends MusicBeatState
 		#end
 
 		// "GLOBAL" SCRIPTS
-		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [Paths.getPath('scripts/')];
 
@@ -525,20 +524,23 @@ class PlayState extends MusicBeatState
 			{
 				for (file in FileSystem.readDirectory(folder))
 				{
+					#if LUA_ALLOWED
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
 					}
+					#end
+					#if HSCRIPT_ALLOWED
 					if(Paths.validScriptType(file) && !filesPushed.contains(file))
 					{
 						scriptArray.push(new FunkinHScript(folder + file));
 						filesPushed.push(file);
 					}
+					#end
 				}
 			}
 		}
-		#end
 		
 
 		// STAGE SCRIPTS
@@ -860,7 +862,6 @@ class PlayState extends MusicBeatState
 		startingSong = true;
 
 		// SONG SPECIFIC SCRIPTS
-		#if LUA_ALLOWED
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [Paths.getPath('scripts/' + Paths.formatToSongPath(SONG.song) + '/')];
 
@@ -876,26 +877,31 @@ class PlayState extends MusicBeatState
 			{
 				for (file in FileSystem.readDirectory(folder))
 				{
+					#if LUA_ALLOWED
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
 					}
+					#end
+					#if HSCRIPT_ALLOWED
 					if(Paths.validScriptType(file) && !filesPushed.contains(file))
 					{
 						scriptArray.push(new FunkinHScript(folder + file));
 						filesPushed.push(file);
 					}
+					#end
 				}
 			}
 		}
-		#end
 
+		#if HSCRIPT_ALLOWED
 		for (script in scriptArray) {
 			script?.setVariable('addScript', function(path:String) {
 				scriptArray.push(new FunkinHScript(Paths.script(path)));
 			});
 		}
+		#end
 		
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode && !seenCutscene)
@@ -3631,12 +3637,14 @@ class PlayState extends MusicBeatState
 	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic {
 		var value:Dynamic = FunkinHScript.Function_Continue;
 
+		#if HSCRIPT_ALLOWED
 		for (i in 0...scriptArray.length) {
 			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
 			final bool:Bool = call == FunkinHScript.Function_Continue;
 			if (!bool && call != null)
 				value = call;
 		}
+		#end
 
 		return value;
 	}
