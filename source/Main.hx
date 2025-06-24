@@ -51,6 +51,13 @@ class Main extends openfl.display.Sprite
 		#if windows
 		WindowsAPI.darkMode(true);
 		#end
+
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+		Highscore.load();
+
+		#if VIDEOS_ALLOWED
+		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
+		#end
 	
 		ClientPrefs.loadDefaultKeys();
 		addChild(new FlxGame(config.gameDimensions[0], config.gameDimensions[1], config.initialState, config.defaultFPS, config.defaultFPS, config.skipSplash, config.startFullscreen));
@@ -105,6 +112,16 @@ class Main extends openfl.display.Sprite
 			DiscordClient.shutdown();
 			Sys.exit(1);
 		});
+		#end
+
+		#if desktop
+		if (!DiscordClient.isInitialized)
+		{
+			DiscordClient.initialize();
+			Application.current.onExit.add (function (exitCode) {
+				DiscordClient.shutdown();
+			});
+		}
 		#end
 	}
 }

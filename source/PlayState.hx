@@ -63,12 +63,7 @@ import sys.FileSystem;
 #end
 
 #if VIDEOS_ALLOWED
-#if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as MP4Handler;
-#elseif (hxCodec >= "2.6.1") import hxcodec.VideoHandler as MP4Handler;
-#elseif (hxCodec == "2.6.0") import VideoHandler as MP4Handler;
-#elseif (hxCodec) import vlc.MP4Handler; 
-#elseif (hxvlc) import hxvlc.flixel.FlxVideo as MP4Handler; 
-#end
+import hxvlc.flixel.FlxVideo;
 #end
 
 class PlayState extends MusicBeatState
@@ -221,7 +216,7 @@ class PlayState extends MusicBeatState
 	public var versionTxt:FlxText;
 	public var healthTxt:FlxText;
 
-	public var cutsceneTxt:Flxtext;
+	var skipVidTxt:FlxText;
 
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
@@ -1171,34 +1166,21 @@ class PlayState extends MusicBeatState
 			startAndEnd();
 			return;
 		}
-		var video:MP4Handler = new MP4Handler();
-		#if (hxvlc)
+		var video:FlxVideo = new FlxVideo();
 		video.load(filepath);
+		skipVidTxt = new FlxText(0, 0, FlxG.width, "Press Z to skip dialogue!", 12);
+		skipVidTxt.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		skipVidTxt.screenCenter(X);
+		add(skipVidTxt);
 		video.onEndReached.add(() -> {
 			video.dispose();
 			if (FlxG.game.contains(video))
 				FlxG.game.removeChild(video);
+			remove(skipVidTxt);
+			skipVidTxt.destroy();
 			startAndEnd();
 		});
 		video.play();
-		#elseif (hxCodec >= "3.0.0")
-		// Recent versions
-		video.play(filepath);
-		video.onEndReached.add(function()
-		{
-			video.dispose();
-			startAndEnd();
-			return;
-		}, true);
-		#else
-		// Older versions
-		video.playVideo(filepath);
-		video.finishCallback = function()
-		{
-			startAndEnd();
-			return;
-		}
-		#end
 		#else
 		FlxG.log.warn('Platform not supported!');
 		startAndEnd();
@@ -1820,10 +1802,7 @@ class PlayState extends MusicBeatState
 			return returnedValue;
 		}
 
-		switch(event.event) {
-			case 'Kill Henchmen': //Better timing so that the kill sound matches the beat intended
-				return 280; //Plays 280ms before the actual position
-		}
+		switch(event.event) {}
 		return 0;
 	}
 
@@ -2037,12 +2016,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (FlxG.keys.justPressed.Z && inCutscene) 
-		{
-			if (psychDialogue != null)
-				psychDialogue.finishThing();
-			else
-				startAndEnd();
-		}
+			startAndEnd();
 
 		if(!inCutscene) {
 			final lerpVal:Float = CoolUtil.boundTo(elapsed * 2.4 * cameraSpeed, 0, 1);

@@ -184,6 +184,8 @@ class DialogueBoxPsych extends FlxSpriteGroup
 	var curCharacter:String = "";
 	//var charPositionList:Array<String> = ['left', 'center', 'right'];
 
+	var skipTxt:FlxText;
+
 	public function new(dialogueList:DialogueFile, ?song:String = null)
 	{
 		super();
@@ -219,6 +221,11 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		box.setGraphicSize(Std.int(box.width * 0.9));
 		box.updateHitbox();
 		add(box);
+
+		skipTxt = new FlxText(0, 0, FlxG.width, "Press Z to skip dialogue!", 12);
+		skipTxt.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		skipTxt.screenCenter(X);
+		add(skipTxt);
 
 		startNextDialog();
 	}
@@ -292,6 +299,12 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		if(!dialogueEnded) {
 			bgFade.alpha += 0.5 * elapsed;
 			if(bgFade.alpha > 0.5) bgFade.alpha = 0.5;
+
+			if (FlxG.keys.justPressed.Z) {
+				dialogueEnded = true;
+				finishThing();
+				kill();
+			}
 
 			if(PlayerSettings.player1.controls.ACCEPT) {
 				if(!daText.finishedText) {
@@ -439,6 +452,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 				kill();
 			}
 		}
+		
 		super.update(elapsed);
 	}
 
