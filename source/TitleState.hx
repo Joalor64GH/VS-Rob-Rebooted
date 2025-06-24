@@ -75,8 +75,10 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
-		if (!initialized)
+		if (!initialized) {
 			ClientPrefs.loadPrefs();
+			Colorblind.updateFilter();
+		}
 
 		if(!initialized && FlxG.save.data != null && FlxG.save.data.fullscreen)
 		{
