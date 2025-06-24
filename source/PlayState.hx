@@ -221,6 +221,8 @@ class PlayState extends MusicBeatState
 	public var versionTxt:FlxText;
 	public var healthTxt:FlxText;
 
+	public var cutsceneTxt:Flxtext;
+
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
@@ -941,6 +943,14 @@ class PlayState extends MusicBeatState
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 		callOnLuas('onCreatePost', []);
+
+		// no point if antialiasing is turned off
+		if (boyfriend.antialiasing == true)
+			boyfriend.antialiasing = ClientPrefs.globalAntialiasing;
+		if (dad.antialiasing == true)
+			dad.antialiasing = ClientPrefs.globalAntialiasing;
+		if (gf.antialiasing == true)
+			gf.antialiasing = ClientPrefs.globalAntialiasing;
 		
 		super.create();
 
@@ -2026,6 +2036,14 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		if (FlxG.keys.justPressed.Z && inCutscene) 
+		{
+			if (psychDialogue != null)
+				psychDialogue.finishThing();
+			else
+				startAndEnd();
+		}
+
 		if(!inCutscene) {
 			final lerpVal:Float = CoolUtil.boundTo(elapsed * 2.4 * cameraSpeed, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x + moveCamTo[0] / 102, camFollow.x + moveCamTo[0] / 102, lerpVal), FlxMath.lerp(camFollowPos.y + moveCamTo[1] / 102, camFollow.y + moveCamTo[1] / 102, lerpVal));
@@ -2651,6 +2669,13 @@ class PlayState extends MusicBeatState
 						}
 				}
 				reloadHealthBarColors();
+
+				if (boyfriend.antialiasing == true)
+					boyfriend.antialiasing = ClientPrefs.globalAntialiasing;
+				if (dad.antialiasing == true)
+					dad.antialiasing = ClientPrefs.globalAntialiasing;
+				if (gf.antialiasing == true)
+			    	gf.antialiasing = ClientPrefs.globalAntialiasing;
 			
 			case 'Change Scroll Speed':
 				if (songSpeedType == "constant")

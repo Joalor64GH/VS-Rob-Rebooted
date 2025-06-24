@@ -150,10 +150,9 @@ class TitleState extends MusicBeatState
 		bgCity.antialiasing = ClientPrefs.globalAntialiasing;
 		bgCity.screenCenter();
 
-		logo = new FlxSprite().loadGraphic(Paths.image('title/titleLogo'));
+		logo = new FlxSprite(0, -100).loadGraphic(Paths.image('title/titleLogo'));
 		logo.antialiasing = ClientPrefs.globalAntialiasing;
-		logo.scale.set(0.75, 0.75);
-		logo.screenCenter();
+		logo.screenCenter(X);
 		logo.updateHitbox();
 
 		swagShader = new ColorSwap();
