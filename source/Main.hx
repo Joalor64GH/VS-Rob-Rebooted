@@ -118,8 +118,9 @@ class Main extends openfl.display.Sprite
 		if (!DiscordClient.isInitialized)
 		{
 			DiscordClient.initialize();
-			Application.current.onExit.add (function (exitCode) {
-				DiscordClient.shutdown();
+			Application.current.window.onClose.add(function() {
+				if (DiscordClient.isInitialized)
+					DiscordClient.shutdown();
 			});
 		}
 		#end
