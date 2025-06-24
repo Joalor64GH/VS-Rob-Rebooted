@@ -5,12 +5,14 @@
 
 	"weekCharacters": ["", "", ""],
 	"weekBackground": "city",
+	"freeplayColor": [41, 128, 185],
 
 	"storyName": "Welcome to Skytopia!",
 	"weekBefore": "tutorial",
-	"weekName": "Week 1",
+	"weekName": "VS Rob (Demo)",
 	"startUnlocked": true,
 
+	"hiddenUntilUnlocked": false,
 	"hideStoryMode": false,
 	"hideFreeplay": false
 }
