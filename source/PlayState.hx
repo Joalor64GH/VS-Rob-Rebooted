@@ -774,7 +774,7 @@ class PlayState extends MusicBeatState
 	if (FileSystem.exists(filePath))
 		creditText = File.getContent(filePath);
 
-	bgThing = new FlxSprite(-550, 470).loadGraphic(Paths.image('songBG'));
+	bgThing = new FlxSprite(-550, 470).makeGraphic(1400, 300, FlxColor.BLACK);
 	bgThing.scrollFactor.set();
 	bgThing.alpha = 0.7;
 	bgThing.setGraphicSize(Std.int(bgThing.width * 0.35), Std.int(bgThing.height * 0.45));
@@ -940,11 +940,11 @@ class PlayState extends MusicBeatState
 		callOnLuas('onCreatePost', []);
 
 		// no point if antialiasing is turned off
-		if (boyfriend.antialiasing == true)
+		if (boyfriend.antialiasing)
 			boyfriend.antialiasing = ClientPrefs.globalAntialiasing;
-		if (dad.antialiasing == true)
+		if (dad.antialiasing)
 			dad.antialiasing = ClientPrefs.globalAntialiasing;
-		if (gf.antialiasing == true)
+		if (gf.antialiasing)
 			gf.antialiasing = ClientPrefs.globalAntialiasing;
 		
 		super.create();
@@ -1168,7 +1168,7 @@ class PlayState extends MusicBeatState
 		}
 		var video:FlxVideo = new FlxVideo();
 		video.load(filepath);
-		skipVidTxt = new FlxText(0, 0, FlxG.width, "Press Z to skip dialogue!", 12);
+		skipVidTxt = new FlxText(0, 0, FlxG.width, "Press Z to skip cutscene!", 12);
 		skipVidTxt.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		skipVidTxt.screenCenter(X);
 		add(skipVidTxt);
@@ -2644,11 +2644,11 @@ class PlayState extends MusicBeatState
 				}
 				reloadHealthBarColors();
 
-				if (boyfriend.antialiasing == true)
+				if (boyfriend.antialiasing)
 					boyfriend.antialiasing = ClientPrefs.globalAntialiasing;
-				if (dad.antialiasing == true)
+				if (dad.antialiasing)
 					dad.antialiasing = ClientPrefs.globalAntialiasing;
-				if (gf.antialiasing == true)
+				if (gf.antialiasing)
 			    	gf.antialiasing = ClientPrefs.globalAntialiasing;
 			
 			case 'Change Scroll Speed':
@@ -2790,7 +2790,7 @@ class PlayState extends MusicBeatState
 		if(achievementObj != null) {
 			return;
 		} else {
-			var achieve:String = checkForAchievement(['ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+			var achieve:String = checkForAchievement(['ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie']);
 
 			if(achieve != null) {
 				startAchievement(achieve);
@@ -3884,10 +3884,6 @@ class PlayState extends MusicBeatState
 						}
 					case 'toastie':
 						if(ClientPrefs.lowQuality && !ClientPrefs.globalAntialiasing && !ClientPrefs.imagesPersist) {
-							unlock = true;
-						}
-					case 'debugger':
-						if(Paths.formatToSongPath(SONG.song) == 'test' && !usedPractice) {
 							unlock = true;
 						}
 				}
